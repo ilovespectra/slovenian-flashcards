@@ -1,0 +1,115 @@
+.flashcard {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 300px;
+    margin: 100px auto;
+}
+
+.englishWord {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #333;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+}
+
+.specialButtons button, .submitBtn {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hintButton {
+    background-color: #0070f3; /* Example style for hint button */
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.hint {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.specialButtons {
+    margin-bottom: 20px;
+}
+
+.specialButtons button:hover, .submitBtn:hover {
+    background-color: #666;
+}
+
+.modal {
+    margin-top: 20px;
+    background-color: #222;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.resultText {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.modal button {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #666;
+}
+
+.dropdownContainer {
+    margin-top: 20px;
+}
+
+.difficultyDropdown {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+}
+
+.specialCharBtn {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.specialCharBtn:hover {
+    background-color: #666;
+}
+
+.score {
+    margin-top: 20px;
+    color: #ffffff;
+  }
+  
