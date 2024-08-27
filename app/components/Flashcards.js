@@ -19,6 +19,7 @@ const Flashcards = () => {
     const [finalLevel, setFinalLevel] = useState(false);
     const [wordsTranslated, setWordsTranslated] = useState(0);
     const [streak, setStreak] = useState(0);
+    const [longestStreak, setLongestStreak] = useState(0); // New state for longest streak
     const [hintsUsed, setHintsUsed] = useState(0);
 
     useEffect(() => {
@@ -87,6 +88,11 @@ const Flashcards = () => {
             setWordsTranslated(wordsTranslated + 1);
             setStreak(streak + 1);
 
+            // Update longest streak if current streak exceeds it
+            if (streak + 1 > longestStreak) {
+                setLongestStreak(streak + 1);
+            }
+
             if (currentWordIndex === words.length - 1) {
                 if (difficulty === 5) {
                     setFinalLevel(true);
@@ -146,6 +152,7 @@ const Flashcards = () => {
             <div className={styles.counters}>
                 <div>Words Translated: {wordsTranslated}</div>
                 <div>Streak: {streak}</div>
+                <div>Longest Streak: {longestStreak}</div> {/* Display the longest streak */}
                 <div>Hints Used: {hintsUsed}</div>
             </div>
             <div className={styles.flashcard}>
