@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti'; // Import canvas-confetti
 import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive } from './initialWords';
 import styles from './Flashcards.module.css';
 
@@ -18,16 +19,26 @@ const Flashcards = () => {
     const [finalLevel, setFinalLevel] = useState(false);
 
     useEffect(() => {
-        // Shuffle words based on difficulty
         const shuffledWords = getWordsByDifficulty();
         shuffleArray(shuffledWords);
         setWords(shuffledWords);
         setCurrentWordIndex(0);
         setShowModal(false);
-        setHint('');
+        setHint('');  
         setLevelCompleted(false);
         setFinalLevel(false);
-    }, [difficulty]);
+    }, [difficulty]);    
+
+    useEffect(() => {
+        if (levelCompleted || finalLevel) {
+            // Trigger confetti animation when level is cleared or final level is won
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    }, [levelCompleted, finalLevel]);
 
     const getWordsByDifficulty = () => {
         switch (difficulty) {
@@ -90,16 +101,16 @@ const Flashcards = () => {
 
     const handleNext = () => {
         if (finalLevel) {
-            return; // End the game
+            return; 
         }
-
+    
         if (levelCompleted) {
             setDifficulty(difficulty + 1);
         }
-
+    
         setUserInput('');
+        setHint('');  
         setShowModal(false);
-        setHint('');
     };
 
     const handleDifficultyChange = (event) => {
@@ -123,45 +134,52 @@ const Flashcards = () => {
     const currentWord = words[currentWordIndex] || {};
 
     return (
-        <div className={styles.flashcard}>
-            <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
-            <input
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
-                className={styles.input}
-                placeholder="Type the Slovenian translation"
-                rows={3}
-            />
-            <div className={styles.specialButtons}>
-                <button onClick={() => handleSpecialCharacter('č')} className={styles.specialCharBtn}>č</button>
-                <button onClick={() => handleSpecialCharacter('š')} className={styles.specialCharBtn}>š</button>
-                <button onClick={() => handleSpecialCharacter('ž')} className={styles.specialCharBtn}>ž</button>
-                <button onClick={handleHint} className={styles.hintButton}>Hint</button>
-                <button onClick={handleSubmit} className={styles.submitBtn}>Submit</button>
+        <div className={styles.container}>
+            <div className={styles.counters}>
+                <div>Words Translated: {/* Add counter here */}</div>
+                <div>Streak: {/* Add streak counter here */}</div>
+                <div>Hints Used: {/* Add hints counter here */}</div>
             </div>
-            <div className={styles.hint}>{hint}</div>
-            {showModal && (
-                <div className={styles.modal}>
-                    <div className={styles.resultText}>
-                        {finalLevel ? 'You won!' : levelCompleted ? `You cleared level ${difficulty}` : isCorrect ? 'Correct!' : 'Try again!'}
-                    </div>
-                    <button onClick={handleNext} className={styles.submitBtn}>
-                        {finalLevel ? 'Play Again' : 'Next'}
-                    </button>
+            <div className={styles.flashcard}>
+                <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
+                <input
+                    type="text"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+                    className={styles.input}
+                    placeholder="Type the Slovenian translation"
+                    rows={3}
+                />
+                <div className={styles.specialButtons}>
+                    <button onClick={() => handleSpecialCharacter('č')} className={styles.specialCharBtn}>č</button>
+                    <button onClick={() => handleSpecialCharacter('š')} className={styles.specialCharBtn}>š</button>
+                    <button onClick={() => handleSpecialCharacter('ž')} className={styles.specialCharBtn}>ž</button>
+                    <button onClick={handleHint} className={styles.hintButton}>Hint</button>
+                    <button onClick={handleSubmit} className={styles.submitBtn}>Submit</button>
                 </div>
-            )}
-            {/* <div className={styles.dropdownContainer}>
-                <label htmlFor="difficulty">Level: </label>
-                <select id="difficulty" value={difficulty} onChange={handleDifficultyChange} className={styles.difficultyDropdown}>
-                    {difficultyOptions.map((level) => (
-                        <option key={level} value={level}>
-                            {level}
-                        </option>
-                    ))}
-                </select>
-            </div> */}
+                <div className={styles.hint}>{hint}</div>
+                {showModal && (
+                    <div className={styles.modal}>
+                        <div className={styles.resultText}>
+                            {finalLevel ? 'You won!' : levelCompleted ? `You cleared level ${difficulty}` : isCorrect ? 'Correct!' : 'Try again!'}
+                        </div>
+                        <button onClick={handleNext} className={styles.submitBtn}>
+                            {finalLevel ? 'Play Again' : 'Next'}
+                        </button>
+                    </div>
+                )}
+                <div className={styles.dropdownContainer}>
+                    <label htmlFor="difficulty">Level: </label>
+                    <select id="difficulty" value={difficulty} onChange={handleDifficultyChange} className={styles.difficultyDropdown}>
+                        {difficultyOptions.map((level) => (
+                            <option key={level} value={level}>
+                                {level}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
         </div>
     );
 };
