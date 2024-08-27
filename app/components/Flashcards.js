@@ -132,6 +132,7 @@ const Flashcards = () => {
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
                 className={styles.input}
                 placeholder="Type the Slovenian translation"
+                rows={3}
             />
             <div className={styles.specialButtons}>
                 <button onClick={() => handleSpecialCharacter('č')} className={styles.specialCharBtn}>č</button>
