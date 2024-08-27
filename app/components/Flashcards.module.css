@@ -1,3 +1,42 @@
+/* Container for the entire flashcard app */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #2e2e2e;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+/* Counters section */
+.counters {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.counters div {
+    flex: 1;
+    text-align: center;
+}
+
+.counters div:not(:last-child) {
+    border-right: 1px solid #444;
+    padding-right: 10px;
+}
+
+.counters div:not(:first-child) {
+    padding-left: 10px;
+}
+
+/* Flashcard styling */
 .flashcard {
     background-color: #1e1e1e;
     padding: 20px;
@@ -8,12 +47,14 @@
     margin: 100px auto;
 }
 
+/* English word display */
 .englishWord {
     font-size: 24px;
     margin-bottom: 20px;
     color: #ffffff;
 }
 
+/* Input field styling */
 .input {
     width: 100%;
     padding: 10px;
@@ -22,6 +63,11 @@
     border-radius: 4px;
     background-color: #333;
     color: #fff;
+}
+
+/* Button container */
+.specialButtons {
+    margin-bottom: 20px;
 }
 
 .specialButtons button, .submitBtn {
@@ -34,28 +80,27 @@
     cursor: pointer;
 }
 
+.specialButtons button:hover, .submitBtn:hover {
+    background-color: #666;
+}
+
+/* Hint button styling */
 .hintButton {
-    background-color: #0070f3; /* Example style for hint button */
+    background-color: #0070f3;
     color: white;
     border: none;
     padding: 8px;
     cursor: pointer;
 }
 
+/* Hint display */
 .hint {
     margin-top: 10px;
     font-size: 16px;
     color: #333;
 }
 
-.specialButtons {
-    margin-bottom: 20px;
-}
-
-.specialButtons button:hover, .submitBtn:hover {
-    background-color: #666;
-}
-
+/* Modal styling */
 .modal {
     margin-top: 20px;
     background-color: #222;
@@ -82,6 +127,7 @@
     background-color: #666;
 }
 
+/* Difficulty dropdown */
 .dropdownContainer {
     margin-top: 20px;
 }
@@ -94,6 +140,7 @@
     color: #fff;
 }
 
+/* Special character buttons */
 .specialCharBtn {
     background-color: #444;
     color: #fff;
@@ -108,32 +155,14 @@
     background-color: #666;
 }
 
+/* Score section */
 .score {
     margin-top: 20px;
     color: #ffffff;
-  }
+}
 
-  .counters {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #2d2d2d;
-    color: #ffffff;
-    border-radius: 8px;
+/* Authentication buttons */
+.authButtons {
     margin-top: 20px;
-    font-size: 16px;
-}
-
-.counters div {
-    flex: 1;
     text-align: center;
-}
-
-.counters div:not(:last-child) {
-    border-right: 1px solid #444;
-    padding-right: 10px;
-}
-
-.counters div:not(:first-child) {
-    padding-left: 10px;
 }

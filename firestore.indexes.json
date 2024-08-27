@@ -1,0 +1,27 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "user-stats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "wordsTranslated",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Streak",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "longestStreak",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "hintsUsed",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
