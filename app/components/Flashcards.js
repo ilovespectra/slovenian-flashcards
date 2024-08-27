@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import confetti from 'canvas-confetti'; // Import canvas-confetti
+import confetti from 'canvas-confetti'; // Import the confetti library
 import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive } from './initialWords';
 import styles from './Flashcards.module.css';
 
@@ -17,6 +17,9 @@ const Flashcards = () => {
     const [isCorrect, setIsCorrect] = useState(false);
     const [levelCompleted, setLevelCompleted] = useState(false);
     const [finalLevel, setFinalLevel] = useState(false);
+    const [wordsTranslated, setWordsTranslated] = useState(0);
+    const [streak, setStreak] = useState(0);
+    const [hintsUsed, setHintsUsed] = useState(0);
 
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
@@ -24,14 +27,13 @@ const Flashcards = () => {
         setWords(shuffledWords);
         setCurrentWordIndex(0);
         setShowModal(false);
-        setHint('');  
+        setHint('');
         setLevelCompleted(false);
         setFinalLevel(false);
-    }, [difficulty]);    
+    }, [difficulty]);
 
     useEffect(() => {
         if (levelCompleted || finalLevel) {
-            // Trigger confetti animation when level is cleared or final level is won
             confetti({
                 particleCount: 100,
                 spread: 70,
@@ -66,8 +68,8 @@ const Flashcards = () => {
 
     const sanitizeText = (text) => {
         return text
-            .toLowerCase() // Convert to lowercase
-            .replace(/[.,!?;:]/g, ''); // Remove punctuation
+            .toLowerCase()
+            .replace(/[.,!?;:]/g, '');
     };
 
     const handleSubmit = () => {
@@ -82,9 +84,10 @@ const Flashcards = () => {
             setShowModal(true);
             setUserInput('');
             setCurrentWordIndex(currentWordIndex + 1);
+            setWordsTranslated(wordsTranslated + 1);
+            setStreak(streak + 1);
 
             if (currentWordIndex === words.length - 1) {
-                // All words are completed
                 if (difficulty === 5) {
                     setFinalLevel(true);
                     setShowModal(true);
@@ -96,21 +99,24 @@ const Flashcards = () => {
         } else {
             setIsCorrect(false);
             setShowModal(true);
+            setStreak(0); // Reset streak if wrong answer
         }
     };
 
     const handleNext = () => {
         if (finalLevel) {
-            return; 
+            // Reset or handle the final level if needed
+            return;
         }
-    
+
         if (levelCompleted) {
             setDifficulty(difficulty + 1);
         }
-    
+
         setUserInput('');
-        setHint('');  
+        setHint('');
         setShowModal(false);
+        setLevelCompleted(false); // Reset levelCompleted state after moving to next level
     };
 
     const handleDifficultyChange = (event) => {
@@ -124,6 +130,8 @@ const Flashcards = () => {
         if (hint.length < currentWord.length) {
             const nextHint = currentWord.substring(0, hint.length + 2);
             setHint(nextHint);
+            setHintsUsed(hintsUsed + 1);
+            setStreak(0); // Reset streak if hint is used
         }
     };
 
@@ -136,9 +144,9 @@ const Flashcards = () => {
     return (
         <div className={styles.container}>
             <div className={styles.counters}>
-                <div>Words Translated: {/* Add counter here */}</div>
-                <div>Streak: {/* Add streak counter here */}</div>
-                <div>Hints Used: {/* Add hints counter here */}</div>
+                <div>Words Translated: {wordsTranslated}</div>
+                <div>Streak: {streak}</div>
+                <div>Hints Used: {hintsUsed}</div>
             </div>
             <div className={styles.flashcard}>
                 <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
@@ -169,16 +177,6 @@ const Flashcards = () => {
                         </button>
                     </div>
                 )}
-                <div className={styles.dropdownContainer}>
-                    <label htmlFor="difficulty">Level: </label>
-                    <select id="difficulty" value={difficulty} onChange={handleDifficultyChange} className={styles.difficultyDropdown}>
-                        {difficultyOptions.map((level) => (
-                            <option key={level} value={level}>
-                                {level}
-                            </option>
-                        ))}
-                    </select>
-                </div>
             </div>
         </div>
     );
