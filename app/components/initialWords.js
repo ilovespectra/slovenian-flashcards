@@ -42,7 +42,7 @@ export const initialWordsOne = [
     { english: 'Hi.', slovenian: 'Živjo.' },
     { english: 'Farewell.', slovenian: 'Adijo.' },
     { english: 'Thank you.', slovenian: 'Hvala.' },
-    { english: 'Please / You’re welcome.', slovenian: 'Prosim.' },
+    { english: 'Please', slovenian: 'Prosim.' },
     { english: 'Excuse me / I’m sorry.', slovenian: 'Oprostite.' },
     { english: 'Yes.', slovenian: 'Ja.' },
     { english: 'No.', slovenian: 'Ne.' },
