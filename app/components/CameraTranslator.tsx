@@ -9,6 +9,8 @@ const CameraTranslator: React.FC = () => {
     const [text, setText] = useState<string | null>(null);
     const [translatedText, setTranslatedText] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [cameraId, setCameraId] = useState<string | null>(null); // Store selected camera ID
+    const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]); // Store available cameras
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -78,9 +80,12 @@ const CameraTranslator: React.FC = () => {
         }
     };
 
-    const handleStartCamera = async () => {
+    const handleStartCamera = async (cameraId: string | null) => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: cameraId ? { deviceId: { exact: cameraId } } : true,
+            });
+
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 videoRef.current.play();
@@ -112,8 +117,30 @@ const CameraTranslator: React.FC = () => {
         }
     };
 
+    const handleCameraSelection = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCameraId = event.target.value;
+        setCameraId(selectedCameraId);
+        await handleStartCamera(selectedCameraId);
+    };
+
     useEffect(() => {
-        handleStartCamera();
+        const getCameras = async () => {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                setCameras(videoDevices);
+
+                // Start the camera with the first available camera by default
+                if (videoDevices.length > 0) {
+                    setCameraId(videoDevices[0].deviceId);
+                    await handleStartCamera(videoDevices[0].deviceId);
+                }
+            } catch (err) {
+                setError('Error getting media devices: ' + err);
+            }
+        };
+
+        getCameras();
 
         return () => {
             if (videoRef.current && videoRef.current.srcObject) {
@@ -132,6 +159,18 @@ const CameraTranslator: React.FC = () => {
                     onChange={handleImageCapture}
                     className={styles.fileInput}
                 />
+                <select
+                    onChange={handleCameraSelection}
+                    value={cameraId || ''}
+                    className={styles.cameraSelect}
+                >
+                    <option value="">Select Camera</option>
+                    {cameras.map(camera => (
+                        <option key={camera.deviceId} value={camera.deviceId}>
+                            {camera.label || `Camera ${camera.deviceId}`}
+                        </option>
+                    ))}
+                </select>
                 <video ref={videoRef} className={styles.video}></video>
                 <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
                 <button className={styles.captureBtn} onClick={captureFrame}>

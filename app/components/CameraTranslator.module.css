@@ -50,4 +50,21 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #141414;
+    color: white;
+}
+
+/* Add styles for the camera select dropdown */
+.cameraSelect {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cameraSelect option {
+    background-color: #333;
+    color: #fff;
 }
