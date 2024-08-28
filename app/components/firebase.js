@@ -1,7 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { onAuthStateChanged } from 'firebase/auth';
+// firebase.js or firebaseConfig.js
+
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,10 +18,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
-export const firestore = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+const firestore = getFirestore(app);
 
-// Export Firebase-provided methods directly
-export const signInWithPopup = (auth, provider) => firebaseSignInWithPopup(auth, provider);
-export const signOut = () => firebaseSignOut(auth);
+// Export Firebase instances and methods
+export { auth, provider, firestore, firebaseSignInWithPopup, firebaseSignOut };
