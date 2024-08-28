@@ -15,6 +15,7 @@ const CameraTranslator: React.FC = () => {
     const [savedTranslations, setSavedTranslations] = useState<any[]>([]); // Store saved translations
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const translateText = useCallback(async (text: string) => {
         const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Directly use the API key for testing
@@ -105,13 +106,14 @@ const CameraTranslator: React.FC = () => {
             setError(null);
             setText(null);
             setTranslatedText(null);
-
+            setLoading(true); // Start loading
+    
             const { data: { text } } = await Tesseract.recognize(imageSrc, 'slv', {
                 logger: (info) => console.log(info),
             });
-
+    
             setText(text);
-
+    
             if (text) {
                 await translateText(text);
             }
@@ -119,6 +121,8 @@ const CameraTranslator: React.FC = () => {
             setError('Error during OCR processing: ' + err);
             setText(null);
             setTranslatedText(null);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
@@ -235,21 +239,21 @@ const CameraTranslator: React.FC = () => {
                     Save
                 </button>
                 {error && <p className={styles.error}>{error}</p>}
-                {translatedText && (
-                    <div className={styles.translation}>
-                        <h2>Translated Text</h2>
-                        <p>{translatedText}</p>
-                    </div>
-                )}
-               <div className={styles.savedTranslations}>
-                   {savedTranslations.map(translation => (
-                       <div key={translation.id} className={styles.translationItem}>
-                           <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
-                           <p><strong></strong> {translation.translatedText}</p>
-                           <hr className={styles.separator} />
-                       </div>
-                   ))}
-                </div>
+
+                {loading && <div className={styles.loadingSpinner}></div>}
+                {translatedText && <p className={styles.translation}>{translatedText}</p>}
+            </div>
+
+            <div className={styles.savedTranslations}>
+                <ul className={styles.translationList}>
+                    {savedTranslations.map(translation => (
+                        <li key={translation.id} className={styles.translationItem}>
+                            <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
+
+                            <p><strong></strong> {translation.translatedText}</p>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );
