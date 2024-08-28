@@ -1,9 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore'; // Updated imports
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAIIakVWNyr2QiCrTdF2ohBXkV2A4OPsls",
     authDomain: "flashcards-74ea0.firebaseapp.com",
@@ -21,6 +19,5 @@ export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const firestore = getFirestore(app);
 
-// Export Firebase-provided methods directly
-export const signInWithPopup = (auth, provider) => firebaseSignInWithPopup(auth, provider);
-export const signOut = () => firebaseSignOut(auth);
+// Export Firestore functions
+export { collection, addDoc, getDocs, query, orderBy };

@@ -71,3 +71,17 @@
 .englishWord i {
     font-style: italic;
 }
+
+.savedTranslations {
+    margin-top: 20px;
+}
+
+.translationItem {
+    border-bottom: 1px solid #ccc; /* Light gray border for the divider */
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.translationItem:last-child {
+    border-bottom: none; /* Remove the border for the last item */
+}

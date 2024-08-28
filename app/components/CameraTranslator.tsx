@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
+import { firestore, collection, addDoc } from './firebase'; // Import Firestore methods
 import styles from './CameraTranslator.module.css'; // Import your CSS module
 
 const CameraTranslator: React.FC = () => {
@@ -11,6 +12,7 @@ const CameraTranslator: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [cameraId, setCameraId] = useState<string | null>(null); // Store selected camera ID
     const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]); // Store available cameras
+    const [savedTranslations, setSavedTranslations] = useState<any[]>([]); // Store saved translations
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -46,6 +48,32 @@ const CameraTranslator: React.FC = () => {
         }
     }, []);
 
+    const saveTranslation = async () => {
+        if (text && translatedText) {
+            try {
+                const historyRef = collection(firestore, 'translations');
+                const docRef = await addDoc(historyRef, {
+                    originalText: text,
+                    translatedText,
+                    reversedText: text, // Assuming reversedText is same as the original text for this example
+                    timestamp: new Date(),
+                });
+    
+                // Update the local saved translations list
+                setSavedTranslations(prev => [
+                    ...prev,
+                    { id: docRef.id, originalText: text, translatedText, reversedText: text, timestamp: { seconds: new Date().getTime() / 1000 } }
+                ]);
+    
+                setText(null);
+                setTranslatedText(null);
+            } catch (err) {
+                console.error('Error saving translation: ', err);
+            }
+        }
+    };
+    
+
     const handleImageCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -80,21 +108,6 @@ const CameraTranslator: React.FC = () => {
         }
     };
 
-    const handleStartCamera = async (cameraId: string | null) => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: cameraId ? { deviceId: { exact: cameraId } } : true,
-            });
-
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                videoRef.current.play();
-            }
-        } catch (err) {
-            setError('Error accessing camera: ' + err);
-        }
-    };
-
     const captureFrame = async () => {
         if (videoRef.current && canvasRef.current) {
             const video = videoRef.current;
@@ -121,6 +134,21 @@ const CameraTranslator: React.FC = () => {
         const selectedCameraId = event.target.value;
         setCameraId(selectedCameraId);
         await handleStartCamera(selectedCameraId);
+    };
+
+    const handleStartCamera = async (cameraId: string | null) => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: cameraId ? { deviceId: { exact: cameraId } } : true,
+            });
+
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+                videoRef.current.play();
+            }
+        } catch (err) {
+            setError('Error accessing camera: ' + err);
+        }
     };
 
     useEffect(() => {
@@ -174,7 +202,10 @@ const CameraTranslator: React.FC = () => {
                 <video ref={videoRef} className={styles.video}></video>
                 <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
                 <button className={styles.captureBtn} onClick={captureFrame}>
-                    Capture Frame
+                    Capture
+                </button>
+                <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
+                    Save
                 </button>
                 {error && <p className={styles.error}>{error}</p>}
                 {translatedText && (
@@ -183,6 +214,16 @@ const CameraTranslator: React.FC = () => {
                         <p>{translatedText}</p>
                     </div>
                 )}
+               <div className={styles.savedTranslations}>
+    {savedTranslations.map(translation => (
+        <div key={translation.id} className={styles.translationItem}>
+            <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
+            <p><strong></strong> {translation.translatedText}</p>
+            <hr className={styles.divider} />
+        </div>
+    ))}
+</div>
+
             </div>
         </div>
     );
