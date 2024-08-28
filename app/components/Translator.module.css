@@ -17,8 +17,9 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
-    width: 600px;
-    margin: 100px auto;
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
 }
 
 /* Input field styling */
@@ -30,6 +31,7 @@
     border-radius: 4px;
     background-color: #333;
     color: #fff;
+    box-sizing: border-box; /* Ensures padding doesn't exceed the container */
 }
 
 /* Button styling */
@@ -41,6 +43,8 @@
     margin: 5px;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%; /* Full width on mobile */
+    max-width: 100%; /* Ensure full width is utilized */
 }
 
 .submitBtn:hover {
@@ -52,6 +56,7 @@
     margin-top: 10px;
     font-size: 16px;
     color: #ff0000;
+    text-align: center; /* Center align hint text */
 }
 
 /* Slovenian word display */
@@ -59,6 +64,7 @@
     font-size: 20px;
     margin-top: 10px;
     color: #ffffff;
+    text-align: center; /* Center align Slovenian word */
 }
 
 /* Reversed English word display */
@@ -66,6 +72,7 @@
     font-size: 20px;
     margin-top: 10px;
     color: #ffffff;
+    text-align: center; /* Center align English word */
 }
 
 .englishWord i {
@@ -74,14 +81,56 @@
 
 .savedTranslations {
     margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Translation item styling */
 .translationItem {
     border-bottom: 1px solid #ccc; /* Light gray border for the divider */
     padding: 10px 0;
     margin-bottom: 10px;
+    color: #ccc;
+    font-size: 16px;
 }
 
 .translationItem:last-child {
     border-bottom: none; /* Remove the border for the last item */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .flashcard {
+        width: 90%; /* Smaller width on smaller screens */
+        margin: 20px auto; /* Reduced margin for mobile */
+    }
+
+    .input {
+        font-size: 14px; /* Smaller font on mobile */
+    }
+
+    .submitBtn {
+        padding: 10px; /* Adjust padding for mobile */
+        font-size: 14px; /* Smaller font on mobile */
+    }
+
+    .hint, 
+    .slovenianWord, 
+    .englishWord {
+        font-size: 16px; /* Adjusted font size for better readability on mobile */
+    }
+
+    .savedTranslations {
+        width: 90%; /* Slightly smaller on mobile */
+        padding: 10px; /* Adjust padding for mobile */
+    }
+
+    .translationItem {
+        font-size: 14px; /* Smaller font on mobile */
+        padding: 8px 0; /* Adjust padding for mobile */
+    }
 }

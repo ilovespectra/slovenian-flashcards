@@ -227,11 +227,12 @@ const CameraTranslator: React.FC = () => {
                 <button className={styles.captureBtn} onClick={captureFrame}>
                     Capture
                 </button>
-                <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
-                    Save
-                </button>
+
                 <button className={styles.clearBtn} onClick={clearCapture}>
                     Clear
+                </button>
+                <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
+                    Save
                 </button>
                 {error && <p className={styles.error}>{error}</p>}
                 {translatedText && (
