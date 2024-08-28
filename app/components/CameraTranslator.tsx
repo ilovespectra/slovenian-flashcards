@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
-import { firestore, collection, addDoc } from './firebase'; // Import Firestore methods
+import { firestore, collection, addDoc, getDocs } from './firebase'; // Import Firestore methods
 import styles from './CameraTranslator.module.css'; // Import your CSS module
 
 const CameraTranslator: React.FC = () => {
@@ -58,13 +58,13 @@ const CameraTranslator: React.FC = () => {
                     reversedText: text, // Assuming reversedText is same as the original text for this example
                     timestamp: new Date(),
                 });
-    
+
                 // Update the local saved translations list
                 setSavedTranslations(prev => [
                     ...prev,
                     { id: docRef.id, originalText: text, translatedText, reversedText: text, timestamp: { seconds: new Date().getTime() / 1000 } }
                 ]);
-    
+
                 setText(null);
                 setTranslatedText(null);
             } catch (err) {
@@ -72,7 +72,21 @@ const CameraTranslator: React.FC = () => {
             }
         }
     };
-    
+
+    const fetchTranslations = async () => {
+        try {
+            const historyRef = collection(firestore, 'translations');
+            const querySnapshot = await getDocs(historyRef);
+            const translations = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                timestamp: doc.data().timestamp.seconds ? new Date(doc.data().timestamp.seconds * 1000) : new Date()
+            }));
+            setSavedTranslations(translations);
+        } catch (err) {
+            console.error('Error fetching translations: ', err);
+        }
+    };
 
     const handleImageCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -169,6 +183,7 @@ const CameraTranslator: React.FC = () => {
         };
 
         getCameras();
+        fetchTranslations(); // Fetch translations on load
 
         return () => {
             if (videoRef.current && videoRef.current.srcObject) {
@@ -215,15 +230,14 @@ const CameraTranslator: React.FC = () => {
                     </div>
                 )}
                <div className={styles.savedTranslations}>
-    {savedTranslations.map(translation => (
-        <div key={translation.id} className={styles.translationItem}>
-            <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
-            <p><strong></strong> {translation.translatedText}</p>
-            <hr className={styles.divider} />
-        </div>
-    ))}
-</div>
-
+                   {savedTranslations.map(translation => (
+                       <div key={translation.id} className={styles.translationItem}>
+                           <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
+                           <p><strong></strong> {translation.translatedText}</p>
+                           <hr className={styles.divider} />
+                       </div>
+                   ))}
+               </div>
             </div>
         </div>
     );

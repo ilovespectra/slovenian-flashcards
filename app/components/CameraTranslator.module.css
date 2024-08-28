@@ -42,14 +42,14 @@
     margin-top: 10px;
     padding: 10px 20px;
     border: none;
-    background-color: #28a745;
+    background-color: #28a74600;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .saveBtn:hover {
-    background-color: #218838;
+    background-color: #616161;
 }
 
 .error {

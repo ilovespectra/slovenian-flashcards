@@ -135,13 +135,13 @@ const Translator: React.FC = () => {
                 <p className={styles.slovenianWord}>{slovenianText}</p>
                 <p className={styles.englishWord}><i>{reversedEnglishText}</i></p>
                 <div className={styles.savedTranslations}>
-                    {savedTranslations.map(translation => (
-                        <div key={translation.id} className={styles.translationItem}>
-                            <p><strong></strong> {translation.translatedText}</p><br></br>
-                            <p><strong></strong><i>&ldquo;{translation.reversedText}&rdquo;</i></p><br></br>
-                        </div>
-                    ))}
-                </div>
+                   {savedTranslations.map(translation => (
+                       <div key={translation.id} className={styles.translationItem}>
+                           <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
+                           <p><strong></strong> {translation.translatedText}</p>
+                       </div>
+                   ))}
+               </div>
             </div>
         </div>
     );
