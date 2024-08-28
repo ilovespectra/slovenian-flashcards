@@ -137,6 +137,8 @@ const CameraTranslator: React.FC = () => {
                     logger: (info) => console.log(info),
                 });
 
+                setText(text);
+
                 if (text) {
                     await translateText(text);
                 }
@@ -163,6 +165,12 @@ const CameraTranslator: React.FC = () => {
         } catch (err) {
             setError('Error accessing camera: ' + err);
         }
+    };
+
+    const clearCapture = () => {
+        setImageSrc(null);
+        setText(null);
+        setTranslatedText(null);
     };
 
     useEffect(() => {
@@ -222,6 +230,9 @@ const CameraTranslator: React.FC = () => {
                 <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
                     Save
                 </button>
+                <button className={styles.clearBtn} onClick={clearCapture}>
+                    Clear
+                </button>
                 {error && <p className={styles.error}>{error}</p>}
                 {translatedText && (
                     <div className={styles.translation}>
@@ -234,10 +245,10 @@ const CameraTranslator: React.FC = () => {
                        <div key={translation.id} className={styles.translationItem}>
                            <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
                            <p><strong></strong> {translation.translatedText}</p>
-                           <hr className={styles.divider} />
+                           <hr className={styles.separator} />
                        </div>
                    ))}
-               </div>
+                </div>
             </div>
         </div>
     );
