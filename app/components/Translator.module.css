@@ -26,12 +26,12 @@
 .input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     border: 2px solid #333;
     border-radius: 4px;
     background-color: #333;
     color: #fff;
-    box-sizing: border-box; /* Ensures padding doesn't exceed the container */
+    box-sizing: border-box; 
 }
 
 /* Button styling */
@@ -59,26 +59,38 @@
     text-align: center; /* Center align hint text */
 }
 
+/* Translation text display with copy icons */
+.translationContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #444; /* Grey outline */
+    border-radius: 4px;
+}
+
 /* Slovenian word display */
 .slovenianWord {
     font-size: 20px;
-    margin-top: 10px;
     color: #ffffff;
-    text-align: center; /* Center align Slovenian word */
+    text-align: left; /* Align left */
+    flex-grow: 1;
 }
 
 /* Reversed English word display */
 .englishWord {
     font-size: 20px;
-    margin-top: 10px;
     color: #ffffff;
-    text-align: center; /* Center align English word */
+    text-align: left; /* Align left */
+    flex-grow: 1;
 }
 
 .englishWord i {
     font-style: italic;
 }
 
+/* Styling for saved translations section */
 .savedTranslations {
     margin-top: 20px;
     width: 100%;
@@ -87,6 +99,7 @@
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center; /* Center align saved translations */
 }
 
 /* Translation item styling */
@@ -96,10 +109,24 @@
     margin-bottom: 10px;
     color: #ccc;
     font-size: 16px;
+    text-align: center; /* Center align text */
 }
 
 .translationItem:last-child {
     border-bottom: none; /* Remove the border for the last item */
+}
+
+.saveBtn {
+    background-color: #97979742;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.saveBtn:hover {
+    background-color: #616161;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 /* Mobile responsiveness */
@@ -133,4 +160,94 @@
         font-size: 14px; /* Smaller font on mobile */
         padding: 8px 0; /* Adjust padding for mobile */
     }
+}
+
+/* Special characters styling */
+.specialCharacters {
+    margin-top: 0px;
+}
+
+.specialCharBtn {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    background-color: #74747478;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.specialCharBtn:hover {
+    background-color: #acacac7b;
+}
+
+/* Copy and delete button styling */
+.copyBtn, .deleteBtn {
+    background: none;
+    border: none;
+    color: #ababab;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    position: relative;
+}
+
+.copyBtn:hover, .deleteBtn:hover {
+    color: #7a7a7a;
+    position: relative;
+}
+
+.tooltip {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.savedTranslation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.translationItem {
+    margin-bottom: 10px;
+}
+
+.translationItem p {
+    margin: 0;
+}
+
+/* Delete button color adjustments */
+.deleteBtn {
+    color: #6e3339;
+}
+
+.deleteBtn:hover {
+    color: #67131cd2;
 }

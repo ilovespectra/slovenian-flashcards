@@ -2,6 +2,9 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { firestore, collection, addDoc, getDocs, query, orderBy } from './firebase'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { deleteDoc, doc } from 'firebase/firestore'; // Import deleteDoc and doc
 import styles from './Translator.module.css';
 
 const Translator: React.FC = () => {
@@ -10,9 +13,19 @@ const Translator: React.FC = () => {
     const [reversedEnglishText, setReversedEnglishText] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [savedTranslations, setSavedTranslations] = useState<any[]>([]);
+    const [tooltipVisible, setTooltipVisible] = useState(false);
+    const [tooltipText, setTooltipText] = useState('');
+    const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
+
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+        setVisibleTooltip(text);
+        setTimeout(() => setVisibleTooltip(null), 1500); // Hide after 1.5 seconds
+    };
 
     const translateText = useCallback(async (text: string) => {
-        const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Directly use the API key for testing
+        const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Replace with your actual API key
         const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
 
         try {
@@ -95,6 +108,16 @@ const Translator: React.FC = () => {
         }
     };
 
+    const deleteTranslation = async (id: string) => {
+        try {
+            const translationDocRef = doc(firestore, 'translations', id);
+            await deleteDoc(translationDocRef);
+            fetchTranslations(); // Refresh the list of saved translations
+        } catch (err) {
+            console.error('Error deleting translation: ', err);
+        }
+    };
+
     useEffect(() => {
         fetchTranslations(); // Fetch saved translations on component mount
     }, []);
@@ -119,29 +142,70 @@ const Translator: React.FC = () => {
         translateText(pastedText);
     };
 
+    const insertSpecialCharacter = (char: string) => {
+        setEnglishText(prevText => prevText + char);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.flashcard}>
                 <textarea
                     className={styles.input}
-                    placeholder="Enter English text"
+                    placeholder="Enter SL or EN text"
                     value={englishText}
                     onChange={handleTextChange}
                     onPaste={handleTextPaste}
                 />
-                {/* <button className={styles.submitBtn} onClick={() => translateText(englishText)}>Translate</button> */}
+                <div className={styles.specialCharacters}>
+                    <button onClick={() => insertSpecialCharacter('č')} className={styles.specialCharBtn}>č</button>
+                    <button onClick={() => insertSpecialCharacter('š')} className={styles.specialCharBtn}>š</button>
+                    <button onClick={() => insertSpecialCharacter('ž')} className={styles.specialCharBtn}>ž</button>
+                </div>
                 <button className={styles.saveBtn} onClick={saveTranslation}>Save</button>
                 {error && <p className={styles.hint}>{error}</p>}
-                <p className={styles.slovenianWord}>{slovenianText}</p>
-                <p className={styles.englishWord}><i>{reversedEnglishText}</i></p>
+
+                {slovenianText && (
+                    <div className={styles.translationContainer}>
+                        <p className={styles.slovenianWord}>
+                            {slovenianText}
+                            <button className={styles.copyBtn} onClick={() => copyToClipboard(slovenianText)}>
+                                <FontAwesomeIcon icon={faCopy} />
+                                {visibleTooltip === slovenianText && <span className={styles.tooltip}>Copied!</span>}
+                            </button>
+                        </p>
+                    </div>
+                )}
+                {reversedEnglishText && (
+                    <div className={styles.translationContainer}>
+                        <p className={styles.englishWord}>
+                            <i>{reversedEnglishText}</i>
+                            <button className={styles.copyBtn} onClick={() => copyToClipboard(reversedEnglishText)}>
+                                <FontAwesomeIcon icon={faCopy} />
+                                {visibleTooltip === reversedEnglishText && <span className={styles.tooltip}>Copied!</span>}
+                            </button>
+                        </p>
+                    </div>
+                )}
+
                 <div className={styles.savedTranslations}>
-                   {savedTranslations.map(translation => (
-                       <div key={translation.id} className={styles.translationItem}>
-                           <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
-                           <p><strong></strong> {translation.translatedText}</p>
-                       </div>
-                   ))}
-               </div>
+                    {savedTranslations.map(translation => (
+                        <div key={translation.id} className={styles.translationItem}>
+                            <p className={styles.savedTranslation}>
+                                <i>&ldquo;{translation.originalText}&rdquo;</i>
+                                <button className={styles.deleteBtn} onClick={() => deleteTranslation(translation.id)}>
+                                    <FontAwesomeIcon icon={faTimes} />
+                                </button>
+                            </p>
+                            <p className={styles.savedTranslation}>
+                                {translation.translatedText}
+                                <button className={styles.copyBtn} onClick={() => copyToClipboard(translation.translatedText)}>
+                                    <FontAwesomeIcon icon={faCopy} />
+                                    {visibleTooltip === translation.translatedText && <span className={styles.tooltip}>Copied!</span>}
+                                </button>
+                            </p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -2,7 +2,9 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
-import { firestore, collection, addDoc, getDocs } from './firebase'; // Import Firestore methods
+import { firestore, collection, addDoc, getDocs, deleteDoc, doc } from './firebase'; // Import Firestore methods
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faTimes } from '@fortawesome/free-solid-svg-icons';
 import styles from './CameraTranslator.module.css'; // Import your CSS module
 
 const CameraTranslator: React.FC = () => {
@@ -16,6 +18,13 @@ const CameraTranslator: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [tooltipVisible, setTooltipVisible] = useState<{ [key: string]: boolean }>({});
+
+    const copyToClipboard = (text: string, id: string) => {
+        navigator.clipboard.writeText(text);
+        setTooltipVisible(prevState => ({ ...prevState, [id]: true }));
+        setTimeout(() => setTooltipVisible(prevState => ({ ...prevState, [id]: false })), 1500); 
+    };
 
     const translateText = useCallback(async (text: string) => {
         const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Directly use the API key for testing
@@ -53,19 +62,13 @@ const CameraTranslator: React.FC = () => {
         if (text && translatedText) {
             try {
                 const historyRef = collection(firestore, 'translations');
-                const docRef = await addDoc(historyRef, {
+                await addDoc(historyRef, {
                     originalText: text,
                     translatedText,
                     reversedText: text, // Assuming reversedText is same as the original text for this example
                     timestamp: new Date(),
                 });
-
-                // Update the local saved translations list
-                setSavedTranslations(prev => [
-                    ...prev,
-                    { id: docRef.id, originalText: text, translatedText, reversedText: text, timestamp: { seconds: new Date().getTime() / 1000 } }
-                ]);
-
+                fetchTranslations(); // Refresh the list of saved translations
                 setText(null);
                 setTranslatedText(null);
             } catch (err) {
@@ -86,6 +89,16 @@ const CameraTranslator: React.FC = () => {
             setSavedTranslations(translations);
         } catch (err) {
             console.error('Error fetching translations: ', err);
+        }
+    };
+
+    const deleteTranslation = async (id: string) => {
+        try {
+            const translationDocRef = doc(firestore, 'translations', id);
+            await deleteDoc(translationDocRef);
+            fetchTranslations(); // Refresh the list of saved translations
+        } catch (err) {
+            console.error('Error deleting translation: ', err);
         }
     };
 
@@ -235,22 +248,37 @@ const CameraTranslator: React.FC = () => {
                 <button className={styles.clearBtn} onClick={clearCapture}>
                     Clear
                 </button>
-                <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
-                    Save
-                </button>
                 {error && <p className={styles.error}>{error}</p>}
 
                 {loading && <div className={styles.loadingSpinner}></div>}
                 {translatedText && <p className={styles.translation}>{translatedText}</p>}
+                <button className={styles.saveBtn} onClick={saveTranslation} disabled={!text || !translatedText}>
+                    Save
+                </button>
             </div>
 
             <div className={styles.savedTranslations}>
                 <ul className={styles.translationList}>
                     {savedTranslations.map(translation => (
+                       
                         <li key={translation.id} className={styles.translationItem}>
-                            <p><strong></strong><i>&ldquo;{translation.originalText}&rdquo;</i></p><br></br>
-
-                            <p><strong></strong> {translation.translatedText}</p>
+                            <p>
+                                <i>&ldquo;{translation.originalText}&rdquo;</i>
+                            </p><br></br>
+                            <p>
+                                <strong></strong> {translation.translatedText}
+                                <button 
+                                    className={styles.copyBtn} 
+                                    onClick={() => copyToClipboard(translation.translatedText, translation.id)}>
+                                    <FontAwesomeIcon icon={faCopy} />
+                                    <span className={`${styles.tooltip} ${tooltipVisible[translation.id] ? styles.showTooltip : ''}`}>
+                                        Copied!
+                                    </span>
+                                </button>
+                                <button className={styles.deleteBtn} onClick={() => deleteTranslation(translation.id)}>
+                                    <FontAwesomeIcon icon={faTimes} />
+                                </button>
+                            </p>
                         </li>
                     ))}
                 </ul>

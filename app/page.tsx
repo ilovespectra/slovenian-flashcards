@@ -8,18 +8,18 @@ import CameraTranslator from './components/CameraTranslator';
 import MenuBar from './components/MenuBar';
 
 const Home: React.FC = () => {
-    const [activeTab, setActiveTab] = useState('flashcard'); // Default tab
+    const [activeTab, setActiveTab] = useState('camera-translator'); // Default tab
 
     const renderComponent = () => {
         switch (activeTab) {
-            case 'flashcard':
-                return <Flashcard />;
             case 'translator':
                 return <Translator />;
             case 'camera-translator':
                 return <CameraTranslator />;
-            default:
+            case 'flashcard':
                 return <Flashcard />;
+            default:
+                return <CameraTranslator />;
         }
     };
 

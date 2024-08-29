@@ -26,6 +26,58 @@
     border-radius: 5px;
 }
 
+/* Copy and delete button styling */
+.copyBtn {
+    background: none;
+    border: none;
+    color: #ababab;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    visibility: visible;
+    position: relative;
+    opacity: 1;
+}
+
+.copyBtn:hover {
+    color: #7a7a7a;
+}
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    position: absolute;
+    background-color: #6a6a6a;
+    color: #fff;
+    text-align: center;
+    padding: 3px;
+    border-radius: 3px;
+    z-index: 1;
+    top: -30px;  /* Adjust positioning as needed */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.showTooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Copy and delete button styling */
+.deleteBtn {
+    background: none;
+    border: none;
+    color: #7f2e2e;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.deleteBtn:hover {
+    color: #7b3232;
+}
+
 .captureBtn, 
 .saveBtn, 
 .clearBtn {
@@ -45,7 +97,7 @@
 }
 
 .saveBtn {
-    background-color: #28a74600;
+    background-color: #8b8b8b4f;
 }
 
 .saveBtn:hover {
