@@ -19,6 +19,8 @@ const CameraTranslator: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [tooltipVisible, setTooltipVisible] = useState<{ [key: string]: boolean }>({});
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [translationToDelete, setTranslationToDelete] = useState<string | null>(null);
 
     const copyToClipboard = (text: string, id: string) => {
         navigator.clipboard.writeText(text);
@@ -76,6 +78,24 @@ const CameraTranslator: React.FC = () => {
             }
         }
     };
+
+    const openDeleteModal = (id: string) => {
+        setTranslationToDelete(id);
+        setIsModalVisible(true);
+    };
+    
+    const closeDeleteModal = () => {
+        setIsModalVisible(false);
+        setTranslationToDelete(null);
+    };
+    
+    const handleDeleteConfirmation = async () => {
+        if (translationToDelete) {
+            await deleteTranslation(translationToDelete);
+            closeDeleteModal();
+        }
+    };
+    
 
     const fetchTranslations = async () => {
         try {
@@ -275,7 +295,9 @@ const CameraTranslator: React.FC = () => {
                                         Copied!
                                     </span>
                                 </button>
-                                <button className={styles.deleteBtn} onClick={() => deleteTranslation(translation.id)}>
+                                <button 
+                                    className={styles.deleteBtn} 
+                                    onClick={() => openDeleteModal(translation.id)}>
                                     <FontAwesomeIcon icon={faTimes} />
                                 </button>
                             </p>
@@ -283,7 +305,17 @@ const CameraTranslator: React.FC = () => {
                     ))}
                 </ul>
             </div>
+            {isModalVisible && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <button onClick={handleDeleteConfirmation} className={styles.confirmBtn}>Delete</button><br></br>
+                        <button onClick={closeDeleteModal} className={styles.cancelBtn}>Cancel</button>
+                    </div>
+                </div>
+            )}
         </div>
+
+        
     );
 };
 

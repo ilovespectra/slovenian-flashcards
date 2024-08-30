@@ -16,7 +16,8 @@ const Translator: React.FC = () => {
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipText, setTooltipText] = useState('');
     const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
-
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [translationToDelete, setTranslationToDelete] = useState<string | null>(null);
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -24,6 +25,23 @@ const Translator: React.FC = () => {
         setTimeout(() => setVisibleTooltip(null), 1500); // Hide after 1.5 seconds
     };
 
+    const openDeleteModal = (id: string) => {
+        setTranslationToDelete(id);
+        setIsModalVisible(true);
+    };
+    
+    const closeDeleteModal = () => {
+        setIsModalVisible(false);
+        setTranslationToDelete(null);
+    };
+    
+    const handleDeleteConfirmation = async () => {
+        if (translationToDelete) {
+            await deleteTranslation(translationToDelete);
+            closeDeleteModal();
+        }
+    };
+    
     const translateText = useCallback(async (text: string) => {
         const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Replace with your actual API key
         const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
@@ -192,9 +210,9 @@ const Translator: React.FC = () => {
                         <div key={translation.id} className={styles.translationItem}>
                             <p className={styles.savedTranslation}>
                                 <i>&ldquo;{translation.originalText}&rdquo;</i>
-                                <button className={styles.deleteBtn} onClick={() => deleteTranslation(translation.id)}>
-                                    <FontAwesomeIcon icon={faTimes} />
-                                </button>
+                                <button className={styles.deleteBtn} onClick={() => openDeleteModal(translation.id)}>
+                                <FontAwesomeIcon icon={faTimes} />
+                            </button>
                             </p>
                             <p className={styles.savedTranslation}>
                                 {translation.translatedText}
@@ -206,9 +224,20 @@ const Translator: React.FC = () => {
                         </div>
                     ))}
                 </div>
+                {isModalVisible && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <button onClick={handleDeleteConfirmation} className={styles.confirmBtn}>Delete</button><br></br>
+                        <button onClick={closeDeleteModal} className={styles.cancelBtn}>Cancel</button>
+                    </div>
+                </div>
+            )}
             </div>
+         
         </div>
+        
     );
+    
 };
 
 export default Translator;

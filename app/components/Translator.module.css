@@ -251,3 +251,53 @@
 .deleteBtn:hover {
     color: #67131cd2;
 }
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background: rgb(39, 39, 39);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.confirmBtn {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.confirmBtn:hover {
+    background-color: #474747;
+
+}
+
+.cancelBtn {
+    background-color: #1d1d1d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancelBtn:hover {
+    background-color: #474747;
+
+}
