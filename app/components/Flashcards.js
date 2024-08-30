@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti'; // Import the confetti library
-import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive } from './initialWords';
+import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive, initialWordsSix } from './initialWords';
 import styles from './Flashcards.module.css';
 import { auth, provider, signInWithPopup, signOut, firestore } from './firebase'; // Import Firebase functions
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const difficultyOptions = [1, 2, 3, 4, 5];
+const difficultyOptions = [1, 2, 3, 4, 5, 6];
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
@@ -72,6 +72,8 @@ const Flashcards = () => {
                 return [...initialWordsFour];
             case 5:
                 return [...initialWordsFive];
+            case 6:
+                return [...initialWordsSix]
             default:
                 return [...initialWordsOne];
         }
@@ -111,7 +113,7 @@ const Flashcards = () => {
             }
 
             if (currentWordIndex === words.length - 1) {
-                if (difficulty === 5) {
+                if (difficulty === 6) {
                     setFinalLevel(true);
                     setShowModal(true);
                 } else {
