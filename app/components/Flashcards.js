@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti'; // Import the confetti library
-import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive, initialWordsSix } from './initialWords';
+import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive, initialWordsSix, initialWordsSeven } from './initialWords';
 import styles from './Flashcards.module.css';
 import { auth, provider, signInWithPopup, signOut, firestore } from './firebase'; // Import Firebase functions
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const difficultyOptions = [1, 2, 3, 4, 5, 6];
+const difficultyOptions = [1, 2, 3, 4, 5, 6, 7];
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
@@ -73,7 +73,9 @@ const Flashcards = () => {
             case 5:
                 return [...initialWordsFive];
             case 6:
-                return [...initialWordsSix]
+                return [...initialWordsSix];
+            case 7:
+                return [...initialWordsSeven];
             default:
                 return [...initialWordsOne];
         }
