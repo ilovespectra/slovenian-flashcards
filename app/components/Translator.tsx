@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { firestore, collection, addDoc, getDocs, query, orderBy } from './firebase'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -14,36 +14,38 @@ const Translator: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [savedTranslations, setSavedTranslations] = useState<any[]>([]);
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [tooltipText, setTooltipText] = useState('');
     const [visibleTooltip, setVisibleTooltip] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [translationToDelete, setTranslationToDelete] = useState<string | null>(null);
 
+    // Copy to clipboard function
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
         setVisibleTooltip(text);
         setTimeout(() => setVisibleTooltip(null), 1500); // Hide after 1.5 seconds
     };
 
+    // Open and close delete modal
     const openDeleteModal = (id: string) => {
         setTranslationToDelete(id);
         setIsModalVisible(true);
     };
-    
+
     const closeDeleteModal = () => {
         setIsModalVisible(false);
         setTranslationToDelete(null);
     };
-    
+
     const handleDeleteConfirmation = async () => {
         if (translationToDelete) {
             await deleteTranslation(translationToDelete);
             closeDeleteModal();
         }
     };
-    
-    const translateText = useCallback(async (text: string) => {
-        const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg'; // Replace with your actual API key
+
+    // Translate text only when the button is clicked
+    const translateText = async () => {
+        const apiKey = 'AIzaSyDo_f7XW3XaJd8RB9aeDVX6vaDqz_9LcIg';
         const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
 
         try {
@@ -54,7 +56,7 @@ const Translator: React.FC = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    q: text,
+                    q: englishText,
                     target: 'sl', // Language code for Slovenian
                     format: 'text',
                 }),
@@ -97,8 +99,9 @@ const Translator: React.FC = () => {
             setSlovenianText('');
             setReversedEnglishText('');
         }
-    }, []);
+    };
 
+    // Save translation to Firestore
     const saveTranslation = async () => {
         try {
             const historyRef = collection(firestore, 'translations');
@@ -114,6 +117,7 @@ const Translator: React.FC = () => {
         }
     };
 
+    // Fetch saved translations from Firestore
     const fetchTranslations = async () => {
         try {
             const historyRef = collection(firestore, 'translations');
@@ -141,25 +145,10 @@ const Translator: React.FC = () => {
     }, []);
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const text = event.target.value;
-        setEnglishText(text);
-        translateText(text);
+        setEnglishText(event.target.value);
     };
 
-    const handleTextPaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        // Prevent the default paste behavior
-        event.preventDefault();
-
-        // Get the pasted text
-        const pastedText = event.clipboardData.getData('text');
-
-        // Set the pasted text into the textarea
-        setEnglishText(pastedText);
-
-        // Translate the pasted text
-        translateText(pastedText);
-    };
-
+    // Insert special Slovenian characters
     const insertSpecialCharacter = (char: string) => {
         setEnglishText(prevText => prevText + char);
     };
@@ -169,16 +158,16 @@ const Translator: React.FC = () => {
             <div className={styles.flashcard}>
                 <textarea
                     className={styles.input}
-                    placeholder="Enter SL or EN text"
+                    placeholder="Enter English text"
                     value={englishText}
                     onChange={handleTextChange}
-                    onPaste={handleTextPaste}
                 />
                 <div className={styles.specialCharacters}>
                     <button onClick={() => insertSpecialCharacter('č')} className={styles.specialCharBtn}>č</button>
                     <button onClick={() => insertSpecialCharacter('š')} className={styles.specialCharBtn}>š</button>
                     <button onClick={() => insertSpecialCharacter('ž')} className={styles.specialCharBtn}>ž</button>
                 </div>
+                <button className={styles.translateBtn} onClick={translateText}>Translate</button>
                 <button className={styles.saveBtn} onClick={saveTranslation}>Save</button>
                 {error && <p className={styles.hint}>{error}</p>}
 
@@ -211,8 +200,8 @@ const Translator: React.FC = () => {
                             <p className={styles.savedTranslation}>
                                 <i>&ldquo;{translation.originalText}&rdquo;</i>
                                 <button className={styles.deleteBtn} onClick={() => openDeleteModal(translation.id)}>
-                                <FontAwesomeIcon icon={faTimes} />
-                            </button>
+                                    <FontAwesomeIcon icon={faTimes} />
+                                </button>
                             </p>
                             <p className={styles.savedTranslation}>
                                 {translation.translatedText}
@@ -225,19 +214,16 @@ const Translator: React.FC = () => {
                     ))}
                 </div>
                 {isModalVisible && (
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <button onClick={handleDeleteConfirmation} className={styles.confirmBtn}>Delete</button><br></br>
-                        <button onClick={closeDeleteModal} className={styles.cancelBtn}>Cancel</button>
+                    <div className={styles.modal}>
+                        <div className={styles.modalContent}>
+                            <button onClick={handleDeleteConfirmation} className={styles.confirmBtn}>Delete</button>
+                            <button onClick={closeDeleteModal} className={styles.cancelBtn}>Cancel</button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
             </div>
-         
         </div>
-        
     );
-    
 };
 
 export default Translator;

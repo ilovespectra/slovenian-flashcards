@@ -129,6 +129,20 @@
     border-radius: 5px;
 }
 
+.translateBtn {
+    background-color: #97979742;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.translateBtn:hover {
+    background-color: #616161;
+    padding: 10px;
+    border-radius: 5px;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .flashcard {
