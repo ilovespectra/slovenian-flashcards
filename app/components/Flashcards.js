@@ -2,13 +2,36 @@
 
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti'; // Import the confetti library
-import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive, initialWordsSix, initialWordsSeven } from './initialWords';
+import { initialWordsOne, 
+    initialWordsTwo, 
+    initialWordsThree, 
+    initialWordsFour, 
+    initialWordsFive, 
+    initialWordsSix, 
+    initialWordsSeven, 
+    initialWordsEight, 
+    initialWordsNine, 
+    initialWordsTen, 
+    initialWordsEleven,
+    initialWordsColors, 
+    initialWordsNumbers, 
+    initialWordsBody,
+    initialWordsHouse, 
+    initialWordsPharmacy, 
+    initialWordsWeekdays,
+    initialWordsPhrases
+} from './initialWords';
 import styles from './Flashcards.module.css';
-import { auth, provider, signInWithPopup, signOut, firestore } from './firebase'; // Import Firebase functions
+import { auth, 
+    provider, 
+    signInWithPopup, 
+    signOut, 
+    firestore 
+} from './firebase'; // Import Firebase functions
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const difficultyOptions = [1, 2, 3, 4, 5, 6, 7];
+const difficultyOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
@@ -16,6 +39,7 @@ const Flashcards = () => {
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
     const [hint, setHint] = useState('');
+    const [showHints, setShowHints] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [levelCompleted, setLevelCompleted] = useState(false);
@@ -76,6 +100,26 @@ const Flashcards = () => {
                 return [...initialWordsSix];
             case 7:
                 return [...initialWordsSeven];
+            case 8:
+                return [...initialWordsEight];
+            case 9:
+                return [...initialWordsNine];
+            case 10:
+                return [...initialWordsTen];
+            case 11:
+                return [...initialWordsEleven];
+            case 12:
+                return [...initialWordsBody];
+            case 13:
+                return [...initialWordsWeekdays];
+            case 14:
+                return [...initialWordsHouse];
+            case 15:
+                return [...initialWordsPharmacy];
+            case 16:
+                return [...initialWordsPhrases];
+            case 17:
+                return [...initialWordsColors];
             default:
                 return [...initialWordsOne];
         }
@@ -234,6 +278,11 @@ const Flashcards = () => {
 
     const currentWord = words[currentWordIndex] || {};
 
+    // New function to toggle hints modal
+    const toggleHintsModal = () => {
+        setShowHints(!showHints);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.counters}>
@@ -273,7 +322,7 @@ const Flashcards = () => {
                 )}
             </div>
             <div className={styles.dropdownContainer}>
-                <select
+            <select
                     className={styles.difficultyDropdown}
                     value={difficulty}
                     onChange={handleDifficultyChange}
@@ -284,7 +333,26 @@ const Flashcards = () => {
                         </option>
                     ))}
                 </select>
+
             </div>
+            <button className={styles.showHintsButton} onClick={toggleHintsModal}>Show Hints</button>
+
+            {/* Hints Modal */}
+            {showHints && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <span className={styles.close} onClick={toggleHintsModal}>&times;</span>
+                        <h2>Hints</h2>
+                        <ul>
+                            {words.map((word, index) => (
+                                <li key={index}>
+                                    <strong>{word.english}</strong> - {word.slovenian}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
             {user ? (
                 <button className={styles.authButton} onClick={handleLogout}>Logout</button>
             ) : (
