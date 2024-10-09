@@ -1318,7 +1318,7 @@ export const initialWordsEleven = [
     { english: 'The elevator is not working.', slovenian: 'Dvigalo ne dela.' },
     { english: 'I lost the key.', slovenian: 'Izgubila sem ključ.' },
     { english: 'Where is the toilet?', slovenian: 'Kje je stranišče?' },
-    { english: 'Are you coming for a visit?', slovenian: 'A prideš na obisk?' },
+    { english: 'Will you come for a visit?', slovenian: 'A prideš na obisk?' },
     { english: 'House for Sale.', slovenian: 'Prodam hišo.' },
     { english: 'Room wanted.', slovenian: 'Najamem sobo.' },
     { english: 'I am looking for an apartment.', slovenian: 'Iščem stanovanje.' },
