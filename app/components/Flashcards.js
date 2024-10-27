@@ -13,6 +13,9 @@ import { initialWordsOne,
     initialWordsNine, 
     initialWordsTen, 
     initialWordsEleven,
+    initialWordsTwelve,
+    initialWordsThirteen,
+    initialWordsFourteen,
     initialWordsColors, 
     initialWordsNumbers, 
     initialWordsBody,
@@ -31,7 +34,29 @@ import { auth,
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const difficultyOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+const difficultyOptions = [
+    { label: "ALL", value: 0 },
+    { label: "1", value: 1 },
+    { label: "2", value: 2 },
+    { label: "3", value: 3 },
+    { label: "4", value: 4 },
+    { label: "5", value: 5 },
+    { label: "6", value: 6 },
+    { label: "7", value: 7 },
+    { label: "8", value: 8 },
+    { label: "9", value: 9 },
+    { label: "10", value: 10 },
+    { label: "11", value: 11 },
+    { label: "12", value: 12 },
+    { label: "13", value: 13 },
+    { label: "14", value: 14 },
+    { label: "15", value: 15 },
+    { label: "16", value: 16 },
+    { label: "17", value: 17 },
+    { label: "18", value: 18 },
+    { label: "19", value: 19 },
+    { label: "20", value: 20 }
+];
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
@@ -85,6 +110,31 @@ const Flashcards = () => {
     }, [levelCompleted, finalLevel]);
 
     const getWordsByDifficulty = () => {
+        if (difficulty === 0) {
+            return [
+                ...initialWordsOne,
+                ...initialWordsTwo,
+                ...initialWordsThree,
+                ...initialWordsFour,
+                ...initialWordsFive,
+                ...initialWordsSix,
+                ...initialWordsSeven,
+                ...initialWordsEight,
+                ...initialWordsNine,
+                ...initialWordsTen,
+                ...initialWordsEleven,
+                ...initialWordsTwelve,
+                ...initialWordsThirteen,
+                ...initialWordsColors,
+                ...initialWordsNumbers,
+                ...initialWordsBody,
+                ...initialWordsHouse,
+                ...initialWordsPharmacy,
+                ...initialWordsWeekdays,
+                ...initialWordsPhrases
+            ];
+        }
+    
         switch (difficulty) {
             case 1:
                 return [...initialWordsOne];
@@ -109,17 +159,23 @@ const Flashcards = () => {
             case 11:
                 return [...initialWordsEleven];
             case 12:
-                return [...initialWordsBody];
+                return [...initialWordsTwelve];
             case 13:
-                return [...initialWordsWeekdays];
+                return [...initialWordsThirteen];
             case 14:
-                return [...initialWordsHouse];
-            case 15:
-                return [...initialWordsPharmacy];
-            case 16:
-                return [...initialWordsPhrases];
-            case 17:
                 return [...initialWordsColors];
+            case 15:
+                return [...initialWordsNumbers];
+            case 16:
+                return [...initialWordsBody];
+            case 17:
+                return [...initialWordsWeekdays];
+            case 18:
+                return [...initialWordsHouse];
+            case 19:
+                return [...initialWordsPharmacy];
+            case 20:
+                return [...initialWordsPhrases];
             default:
                 return [...initialWordsOne];
         }
@@ -323,16 +379,16 @@ const Flashcards = () => {
             </div>
             <div className={styles.dropdownContainer}>
             <select
-                    className={styles.difficultyDropdown}
-                    value={difficulty}
-                    onChange={handleDifficultyChange}
-                >
-                    {difficultyOptions.map(option => (
-                        <option key={option} value={option}>
-                            Difficulty {option}
-                        </option>
-                    ))}
-                </select>
+    className={styles.difficultyDropdown}
+    value={difficulty}
+    onChange={(e) => setDifficulty(Number(e.target.value))}
+>
+    {difficultyOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+            {option.label === "ALL" ? "All Words" : `Difficulty ${option.label}`}
+        </option>
+    ))}
+</select>
 
             </div>
             <button className={styles.showHintsButton} onClick={toggleHintsModal}>Show Hints</button>
