@@ -587,7 +587,7 @@ export const initialWordsFour = [
     { english: 'garlic', slovenian: 'česen' },
     { english: 'potato', slovenian: 'krompir' },
     { english: 'tomato', slovenian: 'paradižnik' },
-    { english: 'lettuce', slovenian: 'solata' },
+    { english: 'salad', slovenian: 'solata' },
     { english: 'soup', slovenian: 'juha' },
     { english: 'bread', slovenian: 'kruh' },
     { english: 'meat', slovenian: 'meso' },
@@ -838,7 +838,7 @@ export const initialWordsFive = [
     // { english: 'garlic', slovenian: 'česen' },
     // { english: 'potato', slovenian: 'krompir' },
     // { english: 'tomato', slovenian: 'paradižnik' },
-    // { english: 'lettuce', slovenian: 'solata' },
+    // { english: 'salad', slovenian: 'solata' },
     // { english: 'soup', slovenian: 'juha' },
     // { english: 'bread', slovenian: 'kruh' },
     // { english: 'meat', slovenian: 'meso' },
@@ -1395,7 +1395,7 @@ export const initialWordsTwelve = [
 ];
 
 export const initialWordsThirteen = [
-    { english: 'apartment', slovenian: 'apartma' },
+    { english: 'studio (apartment)', slovenian: 'apartma' },
     { english: 'double room', slovenian: 'dvoposteljna soba' },
     { english: 'single room', slovenian: 'enoposteljna soba' },
     { english: 'hostel', slovenian: 'hostel' },
