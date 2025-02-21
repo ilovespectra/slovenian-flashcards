@@ -1,7 +1,7 @@
-import Translator from "../components/Translator";
+// import Translator from "../components/Translator";
 
-const TranslatorPage: React.FC = () => {
-    return <Translator />;
-};
+// const TranslatorPage: React.FC = () => {
+//     return <Translator />;
+// };
 
-export default TranslatorPage;
+// export default TranslatorPage;
