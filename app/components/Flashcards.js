@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { FaFire, FaMedal, FaLightbulb, FaCheckCircle } from "react-icons/fa";
 import confetti from 'canvas-confetti'; // Import the confetti library
 import { initialWordsOne, 
     initialWordsTwo, 
@@ -334,10 +335,10 @@ const Flashcards = () => {
     return (
         <div className={styles.container}>
             <div className={styles.counters}>
-                <div>Words Translated: {wordsTranslated}</div>
-                <div>Streak: {streak}</div>
-                <div>Longest Streak: {longestStreak}</div>
-                <div>Hints Used: {hintsUsed}</div>
+            <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
+                <div><FaFire /> Streak: {streak}</div>
+                <div><FaMedal /> Longest Streak: {longestStreak}</div>
+                <div><FaLightbulb /> Hints Used: {hintsUsed}</div>
             </div>
             <div className={styles.flashcard}>
                 <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
@@ -383,7 +384,7 @@ const Flashcards = () => {
 </select>
 
             </div>
-            <button className={styles.showHintsButton} onClick={toggleHintsModal}>Show Hints</button>
+            <button className={styles.hintButton} onClick={toggleHintsModal}>Show Hints</button>
 
             {/* Hints Modal */}
             {showHints && (
@@ -401,11 +402,11 @@ const Flashcards = () => {
                     </div>
                 </div>
             )}
-            {user ? (
+            {/* {user ? (
                 <button className={styles.authButton} onClick={handleLogout}>Logout</button>
             ) : (
                 <button className={styles.authButton} onClick={handleLogin}>Login</button>
-            )}
+            )} */}
         </div>
     );
 };
