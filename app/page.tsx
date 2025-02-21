@@ -8,7 +8,7 @@ import "./globals.css";
 
 const Home: React.FC = () => {
     return (
-        <div className="background-image">
+        <div>
             {/* <MenuBar /> */}
             <Flashcard />
             {/* <Leaderboard /> */}
