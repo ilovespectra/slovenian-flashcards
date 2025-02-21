@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+.background-image {
+  background-image: url('/bg1'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
