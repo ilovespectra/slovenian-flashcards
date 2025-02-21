@@ -1,7 +1,7 @@
-import CameraTranslator from "../components/CameraTranslator";
+// import CameraTranslator from "../components/CameraTranslator";
 
-const CameraTranslatorPage: React.FC = () => {
-    return <CameraTranslator />;
-};
+// const CameraTranslatorPage: React.FC = () => {
+//     return <CameraTranslator />;
+// };
 
-export default CameraTranslatorPage;
+// export default CameraTranslatorPage;
