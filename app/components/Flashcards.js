@@ -360,14 +360,14 @@ const Flashcards = () => {
                     <div className={styles.hintDisplay}>{hint}</div> 
                 </div>
                 {showModal && (
-                    <div className={styles.modal}>
-                        <div className={styles.resultText}>
-                            {isCorrect ? 'Correct!' : 'Incorrect!'}
-                        </div>
-                        <button className={styles.modalButton} onClick={handleNext}>
-                            {finalLevel ? 'Start Over' : 'Next'}
-                        </button>
-                    </div>
+                   <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
+                   <div className={styles.resultText}>
+                       {isCorrect ? 'Correct!' : 'Incorrect!'}
+                   </div>
+                   <button className={styles.modalButton} onClick={handleNext}>
+                       {finalLevel ? 'Start Over' : 'Next'}
+                   </button>
+               </div>
                 )}
             </div>
             <div className={styles.dropdownContainer}>
