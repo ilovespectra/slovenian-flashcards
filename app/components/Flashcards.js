@@ -2,13 +2,53 @@
 
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti'; // Import the confetti library
-import { initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, initialWordsFive } from './initialWords';
+import { initialWordsOne, 
+    initialWordsTwo, 
+    initialWordsThree, 
+    initialWordsFour, 
+    initialWordsFive, 
+    initialWordsSix, 
+    initialWordsSeven, 
+    initialWordsEight, 
+    initialWordsNine, 
+    initialWordsTen, 
+    initialWordsEleven,
+    initialWordsTwelve,
+    initialWordsThirteen,
+    initialWordsFourteen,
+    initialWordsColors, 
+    initialWordsNumbers, 
+    initialWordsBody,
+    initialWordsHouse, 
+    initialWordsPharmacy, 
+    initialWordsWeekdays,
+    initialWordsPhrases
+} from './initialWords';
 import styles from './Flashcards.module.css';
-import { auth, provider, signInWithPopup, signOut, firestore } from './firebase'; // Import Firebase functions
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const difficultyOptions = [1, 2, 3, 4, 5];
+const difficultyOptions = [
+    { label: "ALL", value: 0 },
+    { label: "1", value: 1 },
+    { label: "2", value: 2 },
+    { label: "3", value: 3 },
+    { label: "4", value: 4 },
+    { label: "5", value: 5 },
+    { label: "6", value: 6 },
+    { label: "7", value: 7 },
+    { label: "8", value: 8 },
+    { label: "9", value: 9 },
+    { label: "10", value: 10 },
+    { label: "11", value: 11 },
+    { label: "12", value: 12 },
+    { label: "13", value: 13 },
+    { label: "14", value: 14 },
+    { label: "15", value: 15 },
+    { label: "16", value: 16 },
+    { label: "17", value: 17 },
+    { label: "18", value: 18 },
+    { label: "19", value: 19 },
+    { label: "20", value: 20 }
+];
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
@@ -16,6 +56,7 @@ const Flashcards = () => {
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
     const [hint, setHint] = useState('');
+    const [showHints, setShowHints] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [levelCompleted, setLevelCompleted] = useState(false);
@@ -26,18 +67,18 @@ const Flashcards = () => {
     const [hintsUsed, setHintsUsed] = useState(0);
     const [user, setUser] = useState(null); // Firebase user state
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            setUser(user);
-            if (user) {
-                await loadUserData(user.uid);
-            } else {
-                resetGameData();
-            }
-        });
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    //         setUser(user);
+    //         if (user) {
+    //             await loadUserData(user.uid);
+    //         } else {
+    //             resetGameData();
+    //         }
+    //     });
 
-        return () => unsubscribe();
-    }, []);
+    //     return () => unsubscribe();
+    // }, []);
 
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
@@ -61,6 +102,31 @@ const Flashcards = () => {
     }, [levelCompleted, finalLevel]);
 
     const getWordsByDifficulty = () => {
+        if (difficulty === 0) {
+            return [
+                ...initialWordsOne,
+                ...initialWordsTwo,
+                ...initialWordsThree,
+                ...initialWordsFour,
+                ...initialWordsFive,
+                ...initialWordsSix,
+                ...initialWordsSeven,
+                ...initialWordsEight,
+                ...initialWordsNine,
+                ...initialWordsTen,
+                ...initialWordsEleven,
+                ...initialWordsTwelve,
+                ...initialWordsThirteen,
+                ...initialWordsColors,
+                ...initialWordsNumbers,
+                ...initialWordsBody,
+                ...initialWordsHouse,
+                ...initialWordsPharmacy,
+                ...initialWordsWeekdays,
+                ...initialWordsPhrases
+            ];
+        }
+    
         switch (difficulty) {
             case 1:
                 return [...initialWordsOne];
@@ -72,6 +138,36 @@ const Flashcards = () => {
                 return [...initialWordsFour];
             case 5:
                 return [...initialWordsFive];
+            case 6:
+                return [...initialWordsSix];
+            case 7:
+                return [...initialWordsSeven];
+            case 8:
+                return [...initialWordsEight];
+            case 9:
+                return [...initialWordsNine];
+            case 10:
+                return [...initialWordsTen];
+            case 11:
+                return [...initialWordsEleven];
+            case 12:
+                return [...initialWordsTwelve];
+            case 13:
+                return [...initialWordsThirteen];
+            case 14:
+                return [...initialWordsColors];
+            case 15:
+                return [...initialWordsNumbers];
+            case 16:
+                return [...initialWordsBody];
+            case 17:
+                return [...initialWordsWeekdays];
+            case 18:
+                return [...initialWordsHouse];
+            case 19:
+                return [...initialWordsPharmacy];
+            case 20:
+                return [...initialWordsPhrases];
             default:
                 return [...initialWordsOne];
         }
@@ -111,7 +207,7 @@ const Flashcards = () => {
             }
 
             if (currentWordIndex === words.length - 1) {
-                if (difficulty === 5) {
+                if (difficulty === 6) {
                     setFinalLevel(true);
                     setShowModal(true);
                 } else {
@@ -230,6 +326,11 @@ const Flashcards = () => {
 
     const currentWord = words[currentWordIndex] || {};
 
+    // New function to toggle hints modal
+    const toggleHintsModal = () => {
+        setShowHints(!showHints);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.counters}>
@@ -269,18 +370,37 @@ const Flashcards = () => {
                 )}
             </div>
             <div className={styles.dropdownContainer}>
-                <select
-                    className={styles.difficultyDropdown}
-                    value={difficulty}
-                    onChange={handleDifficultyChange}
-                >
-                    {difficultyOptions.map(option => (
-                        <option key={option} value={option}>
-                            Difficulty {option}
-                        </option>
-                    ))}
-                </select>
+            <select
+    className={styles.difficultyDropdown}
+    value={difficulty}
+    onChange={(e) => setDifficulty(Number(e.target.value))}
+>
+    {difficultyOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+            {option.label === "ALL" ? "All Words" : `Difficulty ${option.label}`}
+        </option>
+    ))}
+</select>
+
             </div>
+            <button className={styles.showHintsButton} onClick={toggleHintsModal}>Show Hints</button>
+
+            {/* Hints Modal */}
+            {showHints && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <span className={styles.close} onClick={toggleHintsModal}>&times;</span>
+                        <h2>Hints</h2>
+                        <ul>
+                            {words.map((word, index) => (
+                                <li key={index}>
+                                    <strong>{word.english}</strong> - {word.slovenian}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
             {user ? (
                 <button className={styles.authButton} onClick={handleLogout}>Logout</button>
             ) : (

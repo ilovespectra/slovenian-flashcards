@@ -9,11 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@google-cloud/translate": "^8.5.0",
     "@types/tesseract.js": "^2.0.0",
     "axios": "^1.7.5",
     "canvas-confetti": "^1.9.3",
     "firebase": "^10.13.0",
+    "html2canvas": "^1.4.1",
+    "jsdom": "^25.0.0",
+    "jspdf": "^2.5.1",
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18",
@@ -21,6 +27,7 @@
     "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "18.3.18",
     "@types/react-dom": "^18",

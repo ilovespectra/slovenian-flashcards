@@ -43,7 +43,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
-    width: 300px;
+    width: 350px;
     margin: 100px auto;
 }
 
@@ -63,6 +63,7 @@
     border-radius: 4px;
     background-color: #333;
     color: #fff;
+    resize: none;
 }
 
 /* Button container */
@@ -165,4 +166,55 @@
 .authButtons {
     margin-top: 20px;
     text-align: center;
+}
+
+/* Ruler/Guide Grid for Categories/Levels */
+.ruler {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Adjust columns as per your design */
+    gap: 10px;
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    max-width: 600px; /* Adjust width as necessary */
+}
+
+.ruler div {
+    background-color: #333;
+    padding: 15px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.ruler div:hover {
+    background-color: #444;
+}
+
+.ruler div.selected {
+    background-color: #0070f3;
+    color: #fff;
+}
+
+.showHintsButton {
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.showHintsButton:hover {
+    background-color: #0056b3;
+}
+
+.hintContainer {
+    margin-top: 10px;
 }
