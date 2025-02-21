@@ -4,10 +4,11 @@ import Leaderboard from './components/Leaderboard';
 import Translator from './components/Translator';
 import CameraTranslator from './components/CameraTranslator';
 import MenuBar from './components/MenuBar';
+import "./globals.css";
 
 export default function Home() {
     return (
-        <div>
+        <div className="background-image">
             {/* <MenuBar /> */}
             <Flashcard />
             <Translator />
