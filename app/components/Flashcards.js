@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaFire, FaMedal, FaLightbulb, FaCheckCircle } from "react-icons/fa";
-import confetti from 'canvas-confetti'; // Import the confetti library
+import confetti from 'canvas-confetti'; 
 import HintModal from './HintModal'; 
+import UserProfile from "./UserProfile";
+import { getStorage } from "firebase/storage";
 import { initialWordsOne, 
     initialWordsTwo, 
     initialWordsThree, 
@@ -27,6 +29,29 @@ import { initialWordsOne,
     initialWordsPhrases
 } from './initialWords';
 import styles from './Flashcards.module.css';
+
+// Firebase imports
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAIIakVWNyr2QiCrTdF2ohBXkV2A4OPsls",
+  authDomain: "flashcards-74ea0.firebaseapp.com",
+  databaseURL: "https://flashcards-74ea0-default-rtdb.firebaseio.com",
+  projectId: "flashcards-74ea0",
+  storageBucket: "flashcards-74ea0.appspot.com",
+  messagingSenderId: "194528277436",
+  appId: "1:194528277436:web:2a2a5e86427427c0ffb1b9",
+  measurementId: "G-XBK94LW1Z5"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+const storage = getStorage(app); 
+const provider = new GoogleAuthProvider();
 
 const difficultyOptions = [
     { label: "ALL", value: 0 },
@@ -67,21 +92,25 @@ const Flashcards = () => {
     const [streak, setStreak] = useState(0);
     const [longestStreak, setLongestStreak] = useState(0);
     const [hintsUsed, setHintsUsed] = useState(0);
-    const [user, setUser] = useState(null); // Firebase user state
+    const [user, setUser] = useState(null);
+    const [showProfileEditor, setShowProfileEditor] = useState(false); 
+    const [username, setUsername] = useState("");
+    const [profilePicture, setProfilePicture] = useState(""); 
 
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    //         setUser(user);
-    //         if (user) {
-    //             await loadUserData(user.uid);
-    //         } else {
-    //             resetGameData();
-    //         }
-    //     });
+    // Firebase Auth State Listener
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        setUser(user);
+        if (user) {
+            await fetchUserProfile(user.uid); // Fetch profile data when user logs in
+        } else {
+            resetGameData();
+        }
+        });
 
-    //     return () => unsubscribe();
-    // }, []);
-
+        return () => unsubscribe();
+    }, []);
+      
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
         shuffleArray(shuffledWords);
@@ -92,6 +121,16 @@ const Flashcards = () => {
         setLevelCompleted(false);
         setFinalLevel(false);
     }, [difficulty]);
+
+    const fetchUserProfile = async (userId) => {
+        const userRef = doc(firestore, "users", userId);
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUsername(data.username || ""); 
+          setProfilePicture(data.profilePicture || ""); 
+        }
+      };
 
     useEffect(() => {
         if (levelCompleted || finalLevel) {
@@ -299,7 +338,9 @@ const Flashcards = () => {
             streak,
             longestStreak,
             hintsUsed,
-            difficulty
+            difficulty,
+            username: user.displayName || "User", 
+            profilePicture: user.photoURL || "",
         }, { merge: true });
     };
 
@@ -336,8 +377,41 @@ const Flashcards = () => {
         setShowHints(!showHints);
     };
 
+    const handleProfileUpdate = async () => {
+        if (user) {
+          await fetchUserProfile(user.uid); 
+        }
+      };
+
     return (
         <div className={styles.container}>
+       <div className={styles.profileSection}>
+        {user ? (
+            <div
+            className={styles.profileInfo}
+            onClick={() => setShowProfileEditor(true)}
+            >
+            <img
+                src={profilePicture || user.photoURL || "/default-profile.png"}
+                alt="Profile"
+                className={styles.profileImage}
+            />
+            <span className={styles.username}>
+                {username || user.displayName || "User"}
+            </span>
+            </div>
+        ) : (
+            <button onClick={handleLogin}>Login with Google</button>
+        )}
+        </div>
+
+    {showProfileEditor && user && (
+        <UserProfile
+            user={user}
+            onClose={() => setShowProfileEditor(false)}
+            firestore={firestore}
+        />
+        )}
             <div className={styles.counters}>
                 <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
                 <div><FaFire /> Streak: {streak}</div>
