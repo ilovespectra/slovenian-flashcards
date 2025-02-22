@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { FaFire, FaMedal, FaLightbulb, FaCheckCircle } from "react-icons/fa";
+import { FaFire, FaMedal, FaLightbulb, FaCheckCircle, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import confetti from 'canvas-confetti'; 
 import HintModal from './HintModal'; 
 import UserProfile from "./UserProfile";
@@ -392,8 +392,9 @@ const Flashcards = () => {
     };
 
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+        setIsSidebarOpen(prevState => !prevState);
     };
+    
 
     const handleProfileUpdate = async () => {
         if (user) {
@@ -401,131 +402,165 @@ const Flashcards = () => {
         }
       };
 
-    return (
+      return (
         <div className={styles.container}>
-       <div className={styles.profileSection}>
-    {user ? (
-        <div
-            className={styles.profileInfo}
-            onClick={() => setShowProfileEditor(true)}
-        >
-            <img
-                src={profilePicture || user.photoURL || "/default-profile.png"}
-                alt="Profile"
-                className={styles.profileImage}
-            />
-            <span className={styles.username}>
-                {username || user.displayName || "User"}
-            </span>
-        </div>
-    ) : (
-        <button onClick={handleLogin}>Login with Google</button>
-    )}
-</div>
-
-        {showProfileEditor && (
-            <UserProfile user={user} onClose={() => setShowProfileEditor(false)} firestore={firestore} />
-        )}
-            <div className={styles.counters}>
-                <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
-                <div><FaFire /> Streak: {streak}</div>
-                <div><FaMedal /> Longest Streak: {longestStreak}</div>
-                <div><FaLightbulb /> Hints Used: {hintsUsed}</div>
+          {/* Sidebar toggle button */}
+          <button className={styles.sidebarToggleButton} onClick={toggleSidebar}>
+            {isSidebarOpen ? "✕" : "☰"}
+          </button>
+      
+          {/* Sidebar */}
+          <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
+            <div className={styles.dropdownContainer}>
+              <select
+                className={styles.difficultyDropdown}
+                value={difficulty}
+                onChange={(e) => setDifficulty(Number(e.target.value))}
+              >
+                {difficultyOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label === "ALL" ? "All Words" : `Level: ${option.label}`}
+                  </option>
+                ))}
+              </select>
             </div>
-    
-            <div className={styles.flashcard}>
-                <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
-                <input
-                    type="text"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    className={styles.input}
-                    onKeyDown={handleKeyDown}
-                />
-                <div className={styles.specialButtons}>
-                    <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('č')}>č</button>
-                    <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('š')}>š</button>
-                    <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('ž')}>ž</button>
+      
+            <button className={styles.hintButton} onClick={toggleHintsModal}>
+              Show Hints
+            </button>
+             {/* Hints modal */}
+          {showHints && (
+            <div className={styles.modalOverlay}>
+              <div className={styles.modal}>
+                <div className={styles.modalContent}>
+                  <span className={styles.close} onClick={toggleHintsModal}>
+                    &times;
+                  </span>
+                  <h2>Hints</h2>
+                  <ul id="hints-list">
+                    {words.map((word, index) => (
+                      <li key={index}>
+                        <strong>{word.english}</strong> - {word.slovenian}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    className={styles.backToTop}
+                    onClick={() => {
+                      const hintsList = document.getElementById("hints-list");
+                      if (hintsList) {
+                        hintsList.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    Back to Top
+                  </button>
                 </div>
-                <button className={styles.submitBtn} onClick={handleSubmit}>Submit</button>
-    
-                <div className={styles.hintContainer}>
-                    <button className={styles.hintButton} onClick={handleHint}>Hint</button>
-                    <div className={styles.hintDisplay}>{hint}</div>
-                </div>
-    
-                {showModal && (
-                    <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
-                        <div className={styles.resultText}>
-                            {isCorrect ? 'Correct!' : 'Incorrect!'}
-                        </div>
-                        <button className={styles.modalButton} onClick={handleNext}>
-                            {finalLevel ? 'Start Over' : 'Next'}
-                        </button>
-                    </div>
-                )}
+              </div>
             </div>
-    
-            <div className={styles.sidebar}>
-                <div className={styles.dropdownContainer}>
-                    <select 
-                        className={styles.difficultyDropdown} 
-                        value={difficulty} 
-                        onChange={(e) => setDifficulty(Number(e.target.value))}
-                    >
-                        {difficultyOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label === "ALL" ? "All Words" : `Level: ${option.label}`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-    
-                <button className={styles.hintButton} onClick={toggleHintsModal}>Show Hints</button>
-
-               {/* Hints Modal */}
-                {showHints && (
-                    <div className={styles.modalOverlay}> {/* Use overlay here */}
-                        <div className={styles.modal}> {/* Use modal for content */}
-                            <div className={styles.modalContent}>
-                                <span className={styles.close} onClick={toggleHintsModal}>&times;</span>
-                                <h2>Hints</h2>
-                                <ul id="hints-list">
-                                    {words.map((word, index) => (
-                                        <li key={index}>
-                                            <strong>{word.english}</strong> - {word.slovenian}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button 
-                                className={styles.backToTop} 
-                                onClick={() => {
-                                    const hintsList = document.getElementById("hints-list");
-                                    if (hintsList) {
-                                        hintsList.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
-                            >
-                                Back to Top
-                            </button>
-                            </div>
-                        </div>
-                        
-                    </div>
-                )}
-            </div>
-            <div className="fixed bottom-4 right-4">
-            <a href="https://www.slonline.si/" target="_blank" rel="noopener noreferrer">
+          )}
+          </div>
+      
+          {/* Profile section */}
+          <div className={styles.profileSection}>
+            {user ? (
+              <div className={styles.profileInfo} onClick={() => setShowProfileEditor(true)}>
                 <img
+                  src={profilePicture || user.photoURL || "/default-profile.png"}
+                  alt="Profile"
+                  className={styles.profileImage}
+                />
+                <span className={styles.username}>
+                  {username || user.displayName || "User"}
+                </span>
+              </div>
+            ) : (
+              <button onClick={handleLogin}>Login with Google</button>
+            )}
+          </div>
+      
+          {/* Profile editor modal */}
+          {showProfileEditor && (
+            <UserProfile
+              user={user}
+              onClose={() => setShowProfileEditor(false)}
+              firestore={firestore}
+            />
+          )}
+      
+          {/* Counters section */}
+          <div className={styles.counters}>
+            <div>
+              <FaCheckCircle /> Words Translated: {wordsTranslated}
+            </div>
+            <div>
+              <FaFire /> Streak: {streak}
+            </div>
+            <div>
+              <FaMedal /> Longest Streak: {longestStreak}
+            </div>
+            <div>
+              <FaLightbulb /> Hints Used: {hintsUsed}
+            </div>
+          </div>
+      
+          {/* Flashcard section */}
+          <div className={styles.flashcard}>
+            <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              className={styles.input}
+              onKeyDown={handleKeyDown}
+            />
+            <div className={styles.specialButtons}>
+              <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('č')}>
+                č
+              </button>
+              <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('š')}>
+                š
+              </button>
+              <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('ž')}>
+                ž
+              </button>
+            </div>
+            <button className={styles.submitBtn} onClick={handleSubmit}>
+              Submit
+            </button>
+      
+            <div className={styles.hintContainer}>
+              <button className={styles.hintButton} onClick={handleHint}>
+                Hint
+              </button>
+              <div className={styles.hintDisplay}>{hint}</div>
+            </div>
+      
+          {/* Result modal */}
+            {showModal && (
+            <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
+                <div className={styles.resultText}>
+                {isCorrect ? 'Correct!' : 'Incorrect!'}
+                </div>
+                <button className={styles.modalButton} onClick={handleNext}>
+                {finalLevel ? 'Start Over' : 'Next'}
+                </button>
+            </div>
+            )}
+          </div>
+      
+          {/* Footer link */}
+          <div className="fixed bottom-4 right-4">
+            <a href="https://www.slonline.si/" target="_blank" rel="noopener noreferrer">
+              <img
                 src="/slo.png"
                 alt="slonline.si"
                 className="w-[50px] h-auto transform transition-transform duration-200 hover:scale-110"
-                />
+              />
             </a>
-            </div>
+          </div>
         </div>
-        
-    );
+      );
 }
 export default Flashcards;
     

@@ -5,69 +5,89 @@
     top: 0;
     height: 100vh;
     width: 250px;
-    background: rgba(161, 136, 12, 0.287); 
-    backdrop-filter: blur(5px); 
-    border: 1px solid rgba(255, 255, 255, 0.2); 
+    background: rgba(51, 45, 10, 0.719);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 8px 0 12px rgba(41, 41, 41, 0.312);
+    box-shadow: 8px 0 12px rgba(41, 41, 41, 0);
     overflow-y: auto;
-}
-
-.sidebar .dropdownContainer,
-.sidebar .hintButton {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .sidebar.closed {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .sidebar .dropdownContainer,
+  .sidebar .hintButton {
     width: 100%;
     text-align: center;
     margin-bottom: 15px;
-}
-
-.sidebar .difficultyDropdown {
+  }
+  
+  .sidebar .difficultyDropdown {
     width: 100%;
     padding: 8px;
     border-radius: 6px;
-}
-
-.sidebar .hintButton {
+    margin-top: 40px;
+    background: rgba(255, 255, 255, 0);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .sidebar .hintButton {
     padding: 10px;
     width: 100%;
     border-radius: 6px;
-}
-
-/* Adjust main content to avoid overlap */
-.container {
-    margin-left: 250px;
-}
-
-
-/* Container for the entire flashcard app */
-.container {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .sidebar .hintButton:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Adjust main content to avoid overlap */
+  .container {
+    margin-left: 0px;
+    transition: margin-left 0.3s ease;
+  }
+  
+  .container.sidebarClosed {
+    margin-left: 0;
+  }
+  
+  /* Container for the entire flashcard app */
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     font-family: Arial, sans-serif;
-    background-color: #00000000;
+    background-color: transparent;
     color: #ffffff;
     min-height: 100vh;
-    background-image: url('https://github.com/ilovespectra/slovenian-flashcards/blob/main/public/bg3.png?raw=true'); 
+    background-image: url('https://github.com/ilovespectra/slovenian-flashcards/blob/main/public/bg3.png?raw=true');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-}
-
-/* Counters section */
-
-@keyframes glow {
-    0% { box-shadow: 0 0 10px rgba(133, 96, 28, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(129, 95, 14, 0.7); }
-    100% { box-shadow: 0 0 10px rgba(108, 60, 13, 0.2); }
-}
-
-
-/* Glassmorphism effect for counters */
-.counters {
+  }
+  
+  /* Counters section */
+  .counters {
     display: flex;
     justify-content: space-between;
     padding: 15px;
@@ -82,55 +102,33 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease-in-out, box-shadow 0.3s;
-}
-
-/* Hover effect with glow */
-.counters:hover {
+  }
+  
+  .counters:hover {
     transform: scale(1.02);
     box-shadow: 0 0 25px rgba(154, 131, 18, 0.7);
-}
-
-/* Individual stat boxes */
-.counters div {
+  }
+  
+  .counters div {
     flex: 1;
     text-align: center;
     padding: 15px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.1);
     transition: background 0.3s ease, color 0.3s ease;
-}
-
-/* Neon glow effect */
-.counters div:hover {
+  }
+  
+  .counters div:hover {
     background: rgba(138, 142, 15, 0.2);
     animation: glow 1.5s infinite alternate;
-}
-
-/* Dividers */
-.counters div:not(:last-child) {
+  }
+  
+  .counters div:not(:last-child) {
     border-right: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .counters {
-        flex-direction: column;
-    }
-
-    .counters div:not(:last-child) {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-}
-/* Flashcard styling */
-
-@keyframes glow {
-    0% { box-shadow: 0 0 10px rgba(133, 96, 28, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(129, 95, 14, 0.7); }
-    100% { box-shadow: 0 0 10px rgba(108, 60, 13, 0.2); }
-}
-
-.flashcard {
+  }
+  
+  /* Flashcard styling */
+  .flashcard {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -138,39 +136,33 @@
     width: 350px;
     margin: 100px auto;
     background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* English word display */
-.englishWord {
+  }
+  
+  .englishWord {
     font-size: 24px;
     margin-bottom: 20px;
     color: #ffffff;
-}
-
-/* Input field styling */
-.input {
+  }
+  
+  .input {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 2px solid #333;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
     color: #fff;
-    resize: none;
-}
-
-/* Button container */
-.specialButtons {
+  }
+  
+  .specialButtons {
     margin-bottom: 20px;
-}
-
-.specialButtons button, .submitBtn {
+  }
+  
+  .specialButtons button,
+  .submitBtn {
     background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
     border: none;
     padding: 10px 15px;
     margin: 5px;
@@ -180,18 +172,16 @@
     color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
-}
-
-.specialButtons button:hover, .submitBtn:hover {
+    transition: background 0.3s ease;
+  }
+  
+  .specialButtons button:hover,
+  .submitBtn:hover {
     background: rgba(138, 142, 15, 0.2);
-    animation: glow 1.5s infinite alternate;
-}
-
-/* Hint button styling */
-.hintButton {
+  }
+  
+  .hintButton {
     background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
-    color: white;
     border: none;
     border-radius: 12px;
     margin-bottom: 10px;
@@ -201,205 +191,22 @@
     color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
-}
-
-.hintButton:hover {
+    transition: background 0.3s ease;
+  }
+  
+  .hintButton:hover {
     background: rgba(233, 240, 23, 0.2);
-    animation: glow 1.5s infinite alternate;
-}
-
-/* Hint display */
-.hint {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #333;
-}
-
-/* Overlay Styling */
-.modal-overlay {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(124, 57, 57, 0.6); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; 
-}
-
-/* Base Modal Styling */
-.modal {
-    background-color: #a29a2ed0;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.842);
-    transition: background-color 0.3s ease;
-    z-index: 1000;
-    max-width: 500px;
-    width: 100%;
-}
-
-
-/* Success Modal (Green) */
-.successModal {
-    background-color: #7be83761;
-}
-
-/* Incorrect Modal (Red) */
-.incorrectModal {
-    background-color: #e8373761;
-}
-
-/* Result Text */
-.resultText {
-    color: #fff;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Modal Button */
-.modal button {
-    background-color: #ffffff7a;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.modal button:hover {
-    background-color: #d5d5d5;
-}
-/* Difficulty dropdown */
-.dropdownContainer {
-    margin-top: 5px;
-}
-
-.difficultyDropdown {
-    padding: 10px;
-    border: 2px solid #333;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
-    color: #fff;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #ffffff;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-/* Special character buttons */
-.specialCharBtn {
-    background-color: #444;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.specialCharBtn:hover {
-    background-color: #666;
-}
-
-.score {
-    margin-top: 20px;
-    color: #ffffff;
-}
-
-.authButtons {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.ruler {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); 
-    gap: 10px;
-    margin-top: 30px;
-    padding: 10px;
-    background-color: #1e1e1e;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    color: #fff;
-    font-size: 14px;
-    width: 100%;
-    max-width: 600px;
-}
-
-.ruler div {
-    background-color: #333;
-    padding: 15px;
-    text-align: center;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.ruler div:hover {
-    background-color: #444;
-}
-
-.ruler div.selected {
-    background-color: #0070f3;
-    color: #fff;
-}
-
-.hintContainer {
-    margin-top: 10px;
-}
-
-.background-image {
-    background-image: url('https://github.com/ilovespectra/slovenian-flashcards/blob/main/public/bg3.png?raw=true'); 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
   }
-
-.backToTop {
-    display: block;
-    margin: 10px auto;
-    padding: 8px 12px;
-    font-size: 14px;
-    background-color: #444;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-size: 18px;
-    color: #ffffff;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.backToTop:hover {
-    background-color: #666;
-}
-
-.profileImage {
-    width: 80px; 
-    height: 80px; 
-    border-radius: 50%;
-    object-fit: cover; 
-    border: 2px solid #ccc;
-  }
-
+  
+  /* Profile section */
   .profileSection {
-    position: fixed; /* Lock the profile section to the viewport */
-    top: 20px; /* Distance from the top */
-    right: 20px; /* Distance from the right */
+    position: fixed;
+    top: 20px;
+    right: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
-    z-index: 1000; /* Ensure it stays above other content */
+    z-index: 1000;
   }
   
   .profileInfo {
@@ -407,7 +214,7 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    background: rgba(45, 45, 45, 0.4); /* Glassmorphism effect */
+    background: rgba(45, 45, 45, 0.4);
     backdrop-filter: blur(10px);
     padding: 10px;
     border-radius: 12px;
@@ -422,11 +229,11 @@
   }
   
   .profileImage {
-    width: 40px; /* Adjust the size as needed */
-    height: 40px; /* Adjust the size as needed */
-    border-radius: 50%; /* Make the image circular */
-    object-fit: cover; /* Ensure the image fits within the circle */
-    border: 2px solid #ccc; /* Optional: Add a border */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
   }
   
   .username {
@@ -434,3 +241,79 @@
     font-weight: bold;
     color: #ffffff;
   }
+  
+  /* Sidebar toggle button */
+  .sidebarToggleButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    color: #fff;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%; /* Full width on mobile */
+    }
+  
+    .container {
+      margin-left: 0;
+    }
+  
+    .counters {
+      flex-direction: column;
+    }
+  
+    .counters div:not(:last-child) {
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  
+    .flashcard {
+      width: 90%; /* Adjust width for mobile */
+      margin: 20px auto; /* Reduce margin for mobile */
+    }
+  }
+
+  .successModal {
+    background-color: #7be83761;
+    border-radius: 10px;
+    padding: 20px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Incorrect Modal (Red) */
+.incorrectModal {
+    background-color: #e8373761;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Modal Button */
+.modal button {
+    background-color: #ffffff7a;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+    background-color: #d5d5d5;
+}
