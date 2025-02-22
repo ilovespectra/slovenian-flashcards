@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 4px 0 10px rgba(236, 252, 14, 0.312);
+    box-shadow: 8px 0 12px rgba(41, 41, 41, 0.312);
     overflow-y: auto;
 }
 

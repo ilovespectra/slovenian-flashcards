@@ -85,7 +85,7 @@ const Flashcards = () => {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(""); 
     const [showHintModal, setShowHintModal] = useState(false);
-    
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -391,6 +391,10 @@ const Flashcards = () => {
         setShowHints(!showHints);
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     const handleProfileUpdate = async () => {
         if (user) {
           await fetchUserProfile(user.uid); 
@@ -506,6 +510,7 @@ const Flashcards = () => {
                             </button>
                             </div>
                         </div>
+                        
                     </div>
                 )}
             </div>
