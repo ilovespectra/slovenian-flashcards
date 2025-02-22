@@ -1,0 +1,138 @@
+/* Full-page overlay */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's above other content */
+  }
+  
+  /* Modal container */
+  .profileEditor {
+    background: rgb(84, 84, 84);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    max-width: 500px;
+    z-index: 1001; /* Ensure it's above the overlay */
+  }
+  
+  .profilePictureContainer {
+    margin-bottom: 20px;
+  }
+  
+  .profilePicture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    justify-self: center;
+  }
+  
+  .fileInput {
+    display: none;
+  }
+  
+  .usernameInput {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #4d4d4d;
+    width: 100%;
+  }
+  
+  .saveButton {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #12f65a27;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+
+  .saveButton:hover {
+    background-color: #12f65a81;
+  }
+  
+  .closeButton {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    background-color: #c8b41a3c;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+  .closeButton:hover {
+    background-color: #c8b41a81;
+  }
+  
+  .saveButton:disabled {
+    background: #4d4d4d;
+    cursor: not-allowed;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .changePictureButton {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #616161; /* Blue color similar to your save button */
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+  
+  .changePictureButton:hover {
+    background-color: #909090a8; /* Darker blue on hover */
+  }
+
+  .logoutButton {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #962e2e; /* Red color for logout */
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logoutButton:hover {
+    background-color: #cc0000d0; /* Darker red on hover */
+  }
