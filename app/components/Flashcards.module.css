@@ -317,3 +317,71 @@
 .modal button:hover {
     background-color: #d5d5d5;
 }
+
+/* Modal overlay (darkens the background when the modal is open) */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark background for the overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensures it's on top of other elements */
+  }
+  
+  /* Modal container */
+  .modal {
+    background-color: rgba(196, 196, 28, 0.589); /* Yellow transparent background */
+    border: 2px solid #d3d3d3; /* Grey border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    max-width: 400px; /* Adjust based on preference */
+    width: 100%; /* Width relative to screen size */
+  }
+  
+  /* Modal content */
+  .modalContent {
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Close button */
+  .close {
+    font-size: 30px;
+    color: #c3bfbf;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  /* Hints list */
+  #hints-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #hints-list li {
+    margin-bottom: 10px;
+  }
+  
+  /* Back to Top button */
+  .backToTop {
+    background-color: #e2e2e2;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .backToTop:hover {
+    background-color: #d0d0d0; 
+  }
+  

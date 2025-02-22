@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaFire, FaMedal, FaLightbulb, FaCheckCircle, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import confetti from 'canvas-confetti'; 
-import HintModal from './HintModal'; 
 import UserProfile from "./UserProfile";
 import { getStorage } from "firebase/storage";
 import { useHistory } from "react-router-dom";
