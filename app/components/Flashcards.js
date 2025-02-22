@@ -7,6 +7,7 @@ import HintModal from './HintModal';
 import UserProfile from "./UserProfile";
 import { getStorage } from "firebase/storage";
 import { useHistory } from "react-router-dom";
+import { auth, firestore } from "./firebaseConfig";  
 import { initialWordsOne, 
     initialWordsTwo, 
     initialWordsThree, 
@@ -36,23 +37,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-    databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
-    projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_APP_ID,
-    measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
-  };
-
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
-const storage = getStorage(app); 
 const provider = new GoogleAuthProvider();
+const db = firestore;
 
 const difficultyOptions = [
     { label: "ALL", value: 0 },
@@ -98,20 +84,20 @@ const Flashcards = () => {
     const [showProfileEditor, setShowProfileEditor] = useState(false); 
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(""); 
+    const [showHintModal, setShowHintModal] = useState(false);
 
-    // Firebase Auth State Listener
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        setUser(user);
-        if (user) {
-            await fetchUserProfile(user.uid); // Fetch profile data when user logs in
-        } else {
-            resetGameData();
-        }
+            setUser(user);
+            if (user) {
+                await fetchUserProfile(user.uid);
+            } else {
+                resetGameData();
+            }
         });
-
+    
         return () => unsubscribe();
-    }, []);
+    }, []);    
       
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
@@ -125,14 +111,19 @@ const Flashcards = () => {
     }, [difficulty]);
 
     const fetchUserProfile = async (userId) => {
-        const userRef = doc(firestore, "users", userId);
+        const userRef = doc(firestore, "users", uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
           setUsername(data.username || ""); 
           setProfilePicture(data.profilePicture || ""); 
+          setWordsTranslated(data.wordsTranslated || 0);
+          setStreak(data.streak || 0);
+          setLongestStreak(data.longestStreak || 0);
+          setHintsUsed(data.hintsUsed || 0);
         }
-      };
+    };
+    
 
     useEffect(() => {
         if (levelCompleted || finalLevel) {
@@ -332,19 +323,18 @@ const Flashcards = () => {
             console.error('Logout failed:', error);
         }
     };    
-
+    
     const saveUserData = async (userId) => {
-        const userRef = doc(firestore, 'users', userId);
+        if (!userId) return;
+        const userRef = doc(firestore, "users", userId);
         await setDoc(userRef, {
             wordsTranslated,
             streak,
             longestStreak,
-            hintsUsed,
-            difficulty,
-            username: user.displayName || "User", 
-            profilePicture: user.photoURL || "",
+            hintsUsed
         }, { merge: true });
     };
+    
 
     const loadUserData = async (userId) => {
         const userRef = doc(firestore, 'users', userId);
@@ -388,11 +378,11 @@ const Flashcards = () => {
     return (
         <div className={styles.container}>
        <div className={styles.profileSection}>
-        {user ? (
-            <div
+    {user ? (
+        <div
             className={styles.profileInfo}
             onClick={() => setShowProfileEditor(true)}
-            >
+        >
             <img
                 src={profilePicture || user.photoURL || "/default-profile.png"}
                 alt="Profile"
@@ -401,18 +391,18 @@ const Flashcards = () => {
             <span className={styles.username}>
                 {username || user.displayName || "User"}
             </span>
-            </div>
-        ) : (
-            <button onClick={handleLogin}>Login with Google</button>
-        )}
         </div>
+    ) : (
+        <button onClick={handleLogin}>Login with Google</button>
+    )}
+</div>
 
     {showProfileEditor && user && (
         <UserProfile
-            user={user}
-            onClose={() => setShowProfileEditor(false)}
-            firestore={firestore}
-        />
+        user={user}
+        onClose={() => setShowProfileEditor(false)}
+        firestore={firestore}
+      />
         )}
             <div className={styles.counters}>
                 <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
@@ -503,10 +493,13 @@ const Flashcards = () => {
             </div>
             <div className="fixed bottom-4 right-4">
             <a href="https://www.slonline.si/" target="_blank" rel="noopener noreferrer">
-                <img src="/slo.png" alt="slonline.si" className="w-[50px] h-auto" />
+                <img
+                src="/slo.png"
+                alt="slonline.si"
+                className="w-[50px] h-auto transform transition-transform duration-200 hover:scale-110"
+                />
             </a>
             </div>
-
         </div>
         
     );

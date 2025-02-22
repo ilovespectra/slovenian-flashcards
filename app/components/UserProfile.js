@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { getAuth, signOut } from "firebase/auth"; // Import signOut
+import { getAuth, signOut } from "firebase/auth"; 
 import styles from "./UserProfile.module.css";
 
 const UserProfile = ({ user, onClose, firestore }) => {
@@ -35,40 +35,49 @@ const UserProfile = ({ user, onClose, firestore }) => {
     }
   };
 
-  // Save profile data to Firestore
   const saveProfile = async () => {
     setLoading(true);
     try {
-      const userRef = doc(firestore, "users", user.uid);
-      let profilePictureUrl = previewImage;
+        const userRef = doc(firestore, "users", user.uid);
+        let profilePictureUrl = previewImage;
 
-      // Upload new profile picture if selected
-      if (profilePicture) {
-        const storage = getStorage();
-        const storageRef = ref(storage, `profilePictures/${user.uid}`);
-        await uploadBytes(storageRef, profilePicture);
-        profilePictureUrl = await getDownloadURL(storageRef);
-      }
+        // Upload new profile picture if selected
+        if (profilePicture) {
+            const storage = getStorage();
+            const storageRef = ref(storage, `profilePictures/${user.uid}`);
+            
+            // Upload file and get download URL
+            await uploadBytes(storageRef, profilePicture);
+            profilePictureUrl = await getDownloadURL(storageRef);
+        }
 
-      // Save username and profile picture URL to Firestore
-      await setDoc(
-        userRef,
-        {
-          username,
-          profilePicture: profilePictureUrl,
-        },
-        { merge: true }
-      );
+        // Save username and profile picture URL to Firestore
+        await setDoc(
+            userRef,
+            {
+                username,
+                profilePicture: profilePictureUrl,
+            },
+            { merge: true }
+        );
 
-      alert("Profile updated successfully!");
-      onClose(); // Close the profile editor
+        // Ensure the state updates with the new profile picture URL
+        setPreviewImage(profilePictureUrl);
+
+        // Reset profile picture selection
+        setProfilePicture(null);
+
+        alert("Profile updated successfully!");
+        onClose(); // Close the modal after the update is done
     } catch (error) {
-      console.error("Error saving profile:", error);
-      alert("Failed to update profile.");
+        console.error("Error saving profile:", error);
+        alert("Failed to update profile.");
     } finally {
-      setLoading(false);
+        setLoading(false); // Ensure the loading state is reset at the end
     }
-  };
+};
+
+
 
   // Handle logout
   const handleLogout = async () => {
