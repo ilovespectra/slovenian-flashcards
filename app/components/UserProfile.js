@@ -49,6 +49,7 @@ const UserProfile = ({ user, onClose, firestore }) => {
             // Upload file and get download URL
             await uploadBytes(storageRef, profilePicture);
             profilePictureUrl = await getDownloadURL(storageRef);
+            profilePictureUrl = profilePictureUrl.replace(/['"]+/g, "");
         }
 
         // Save username and profile picture URL to Firestore
