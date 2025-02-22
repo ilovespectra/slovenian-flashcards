@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaFire, FaMedal, FaLightbulb, FaCheckCircle } from "react-icons/fa";
 import confetti from 'canvas-confetti'; // Import the confetti library
+import HintModal from './HintModal'; 
 import { initialWordsOne, 
     initialWordsTwo, 
     initialWordsThree, 
@@ -42,10 +43,10 @@ const difficultyOptions = [
     { label: "11", value: 11 },
     { label: "12", value: 12 },
     { label: "13", value: 13 },
-    { label: "14", value: 14 },
-    { label: "15", value: 15 },
-    { label: "16", value: 16 },
-    { label: "17", value: 17 },
+    { label: "Colors", value: 14 },
+    { label: "`#`", value: 15 },
+    { label: "Body", value: 16 },
+    { label: "Days", value: 17 },
     { label: "18", value: 18 },
     { label: "19", value: 19 },
     { label: "20", value: 20 }
@@ -253,19 +254,22 @@ const Flashcards = () => {
 
     const handleHint = () => {
         if (words.length === 0 || currentWordIndex >= words.length) return;
-    
+      
         const currentWord = words[currentWordIndex].slovenian;
         if (hint.length < currentWord.length) {
-            const nextHint = currentWord.substring(0, hint.length + 2); // Provide a better hint
-            setHint(nextHint);
-            setHintsUsed(hintsUsed + 1);
-            setStreak(0); // Reset streak if hint is used
-    
-            if (user) {
-                saveUserData(user.uid);
-            }
+          const nextHint = currentWord.substring(0, hint.length + 2); // Provide a better hint
+          setHint(nextHint);
+          setHintsUsed(hintsUsed + 1);
+          setStreak(0); // Reset streak if hint is used
+      
+          // Show the hint modal
+          setShowHintModal(true);
+      
+          if (user) {
+            saveUserData(user.uid);
+          }
         }
-    };
+      };
 
     const handleSpecialCharacter = (char) => {
         setUserInput(userInput + char);
@@ -335,11 +339,12 @@ const Flashcards = () => {
     return (
         <div className={styles.container}>
             <div className={styles.counters}>
-            <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
+                <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
                 <div><FaFire /> Streak: {streak}</div>
                 <div><FaMedal /> Longest Streak: {longestStreak}</div>
                 <div><FaLightbulb /> Hints Used: {hintsUsed}</div>
             </div>
+    
             <div className={styles.flashcard}>
                 <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
                 <input
@@ -355,60 +360,80 @@ const Flashcards = () => {
                     <button className={styles.specialCharBtn} onClick={() => handleSpecialCharacter('ž')}>ž</button>
                 </div>
                 <button className={styles.submitBtn} onClick={handleSubmit}>Submit</button>
+    
                 <div className={styles.hintContainer}>
                     <button className={styles.hintButton} onClick={handleHint}>Hint</button>
-                    <div className={styles.hintDisplay}>{hint}</div> 
+                    <div className={styles.hintDisplay}>{hint}</div>
                 </div>
+    
                 {showModal && (
-                   <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
-                   <div className={styles.resultText}>
-                       {isCorrect ? 'Correct!' : 'Incorrect!'}
-                   </div>
-                   <button className={styles.modalButton} onClick={handleNext}>
-                       {finalLevel ? 'Start Over' : 'Next'}
-                   </button>
-               </div>
+                    <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
+                        <div className={styles.resultText}>
+                            {isCorrect ? 'Correct!' : 'Incorrect!'}
+                        </div>
+                        <button className={styles.modalButton} onClick={handleNext}>
+                            {finalLevel ? 'Start Over' : 'Next'}
+                        </button>
+                    </div>
                 )}
             </div>
-            <div className={styles.dropdownContainer}>
-            <select
-    className={styles.difficultyDropdown}
-    value={difficulty}
-    onChange={(e) => setDifficulty(Number(e.target.value))}
->
-    {difficultyOptions.map((option) => (
-        <option key={option.value} value={option.value}>
-            {option.label === "ALL" ? "All Words" : `Difficulty ${option.label}`}
-        </option>
-    ))}
-</select>
-
-            </div>
-            <button className={styles.hintButton} onClick={toggleHintsModal}>Show Hints</button>
-
-            {/* Hints Modal */}
-            {showHints && (
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <span className={styles.close} onClick={toggleHintsModal}>&times;</span>
-                        <h2>Hints</h2>
-                        <ul>
-                            {words.map((word, index) => (
-                                <li key={index}>
-                                    <strong>{word.english}</strong> - {word.slovenian}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+    
+            <div className={styles.sidebar}>
+                <div className={styles.dropdownContainer}>
+                    <select 
+                        className={styles.difficultyDropdown} 
+                        value={difficulty} 
+                        onChange={(e) => setDifficulty(Number(e.target.value))}
+                    >
+                        {difficultyOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label === "ALL" ? "All Words" : `Level: ${option.label}`}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-            )}
-            {/* {user ? (
-                <button className={styles.authButton} onClick={handleLogout}>Logout</button>
-            ) : (
-                <button className={styles.authButton} onClick={handleLogin}>Login</button>
-            )} */}
-        </div>
-    );
-};
+    
+                <button className={styles.hintButton} onClick={toggleHintsModal}>Show Hints</button>
 
+               {/* Hints Modal */}
+                {showHints && (
+                    <div className={styles.modalOverlay}> {/* Use overlay here */}
+                        <div className={styles.modal}> {/* Use modal for content */}
+                            <div className={styles.modalContent}>
+                                <span className={styles.close} onClick={toggleHintsModal}>&times;</span>
+                                <h2>Hints</h2>
+                                <ul id="hints-list">
+                                    {words.map((word, index) => (
+                                        <li key={index}>
+                                            <strong>{word.english}</strong> - {word.slovenian}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button 
+                                className={styles.backToTop} 
+                                onClick={() => {
+                                    const hintsList = document.getElementById("hints-list");
+                                    if (hintsList) {
+                                        hintsList.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
+                            >
+                                Back to Top
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className="fixed bottom-4 right-4">
+            <a href="https://www.slonline.si/" target="_blank" rel="noopener noreferrer">
+                <img src="/slo.png" alt="slonline.si" className="w-[50px] h-auto" />
+            </a>
+            </div>
+
+        </div>
+        
+    );
+}
 export default Flashcards;
+    
