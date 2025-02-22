@@ -35,7 +35,7 @@ import styles from './Flashcards.module.css';
 // Firebase imports
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 const provider = new GoogleAuthProvider();
 const db = firestore;
@@ -125,6 +125,27 @@ const Flashcards = () => {
         }
     };
     
+    useEffect(() => {
+        if (!user?.uid) return;
+      
+        const userRef = doc(firestore, "users", user.uid);
+      
+        // Listen for real-time updates
+        const unsubscribe = onSnapshot(userRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setUsername(data.username || "Guest");
+            setProfilePicture(data.profilePicture || "/default-profile.png");
+            setWordsTranslated(data.wordsTranslated || 0);
+            setStreak(data.streak || 0);
+            setLongestStreak(data.longestStreak || 0);
+            setHintsUsed(data.hintsUsed || 0);
+          }
+        });
+      
+        // Cleanup listener when component unmounts
+        return () => unsubscribe();
+      }, [user?.uid, firestore]);
 
     useEffect(() => {
         if (levelCompleted || finalLevel) {
