@@ -6,6 +6,7 @@ import confetti from 'canvas-confetti';
 import HintModal from './HintModal'; 
 import UserProfile from "./UserProfile";
 import { getStorage } from "firebase/storage";
+import { useHistory } from "react-router-dom";
 import { initialWordsOne, 
     initialWordsTwo, 
     initialWordsThree, 
@@ -35,17 +36,17 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAIIakVWNyr2QiCrTdF2ohBXkV2A4OPsls",
-  authDomain: "flashcards-74ea0.firebaseapp.com",
-  databaseURL: "https://flashcards-74ea0-default-rtdb.firebaseio.com",
-  projectId: "flashcards-74ea0",
-  storageBucket: "flashcards-74ea0.appspot.com",
-  messagingSenderId: "194528277436",
-  appId: "1:194528277436:web:2a2a5e86427427c0ffb1b9",
-  measurementId: "G-XBK94LW1Z5"
-};
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+    databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
+  };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -76,6 +77,7 @@ const difficultyOptions = [
     { label: "19", value: 19 },
     { label: "20", value: 20 }
 ];
+
 
 const Flashcards = () => {
     const [difficulty, setDifficulty] = useState(1);
