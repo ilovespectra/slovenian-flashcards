@@ -60,7 +60,7 @@ const UserProfile = ({ user, onClose, firestore }) => {
             },
             { merge: true }
         );
-
+        console.log("Firestore update complete");
         // Ensure the state updates with the new profile picture URL
         setPreviewImage(profilePictureUrl);
 
@@ -88,6 +88,11 @@ const UserProfile = ({ user, onClose, firestore }) => {
       console.error("Logout failed:", error);
     }
   };
+
+  console.log("Saving profile for user:", user.uid);
+console.log("New username:", username);
+console.log("New profile picture:", profilePicture);
+
 
   return (
     <div className={styles.modalOverlay}>

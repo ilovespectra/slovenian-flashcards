@@ -85,6 +85,7 @@ const Flashcards = () => {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(""); 
     const [showHintModal, setShowHintModal] = useState(false);
+    
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -111,12 +112,12 @@ const Flashcards = () => {
     }, [difficulty]);
 
     const fetchUserProfile = async (userId) => {
-        const userRef = doc(firestore, "users", uid);
+        const userRef = doc(firestore, "users", userId);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setUsername(data.username || ""); 
-          setProfilePicture(data.profilePicture || ""); 
+          setUsername(data.username || "Guest"); 
+          setProfilePicture(data.profilePicture || "/default-profile.png"); 
           setWordsTranslated(data.wordsTranslated || 0);
           setStreak(data.streak || 0);
           setLongestStreak(data.longestStreak || 0);
@@ -397,12 +398,8 @@ const Flashcards = () => {
     )}
 </div>
 
-    {showProfileEditor && user && (
-        <UserProfile
-        user={user}
-        onClose={() => setShowProfileEditor(false)}
-        firestore={firestore}
-      />
+        {showProfileEditor && (
+            <UserProfile user={user} onClose={() => setShowProfileEditor(false)} firestore={firestore} />
         )}
             <div className={styles.counters}>
                 <div><FaCheckCircle /> Words Translated: {wordsTranslated}</div>
