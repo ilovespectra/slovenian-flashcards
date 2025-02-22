@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
-import Flashcard from './components/Flashcards';
+import React from 'react';
+import Flashcards from './components/Flashcards';
 import "./globals.css";
 
 const Home: React.FC = () => {
     return (
         <div>
-            <Flashcard />
+            <Flashcards />
         </div>
     );
 };

@@ -1,23 +1,116 @@
-.leaderboard {
-    margin: 20px;
+/* Leaderboard.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    padding: 10px;
+    border-radius: 12px;
+    margin: 0 auto;
+    background-color: #66665a9c;
+}
+
+.title {
+    color: #f2f2f2;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.sortLabel {
+    color: #f0f0f0;
+    font-weight: 500;
 }
 
 .sortSelect {
-    margin-bottom: 20px;
-    padding: 5px;
+    background-color: #333;
+    color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .table {
     width: 100%;
+    background-color: #333;
+    margin-top: 20px;
     border-collapse: collapse;
+    padding: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.table th, .table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+.tableHeader {
+    background-color: #444;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    padding: 12px;
 }
 
-.table th {
-    background-color: #f2f2f2;
+.tableRow {
+    padding: 12px;
+    text-align: right;
+}
+
+.tableRowEven {
+    background-color: #4f4f4f;
+    padding: 10px;
+    text-align: center;
+}
+
+.tableRowOdd {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+.tableRowHover:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.defaultProfilePic {
+    width: 30px;
+    height: 30px;
+    background-color: #555;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 1rem;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+}
+
+.profilePic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .tableHeader, .tableRow {
+        padding: 8px;
+    }
+
+    .sortLabel, .sortSelect {
+        font-size: 0.9rem;
+    }
 }

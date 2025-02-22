@@ -7,6 +7,7 @@ import UserProfile from "./UserProfile";
 import { getStorage } from "firebase/storage";
 import { useHistory } from "react-router-dom";
 import { auth, firestore } from "./firebaseConfig";  
+import Leaderboard from "./Leaderboard";
 import { initialWordsOne, 
     initialWordsTwo, 
     initialWordsThree, 
@@ -84,7 +85,12 @@ const Flashcards = () => {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(""); 
     const [showHintModal, setShowHintModal] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+    const toggleLeaderboard = () => {
+        setShowLeaderboard(!showLeaderboard);
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -98,6 +104,8 @@ const Flashcards = () => {
     
         return () => unsubscribe();
     }, []);    
+
+    
       
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
@@ -243,11 +251,11 @@ const Flashcards = () => {
 
     const handleSubmit = () => {
         if (words.length === 0 || currentWordIndex >= words.length) return;
-
+    
         const currentWord = words[currentWordIndex]?.slovenian;
         const sanitizedCurrentWord = sanitizeText(currentWord);
         const sanitizedInput = sanitizeText(userInput);
-
+    
         if (sanitizedInput === sanitizedCurrentWord) {
             setIsCorrect(true);
             setShowModal(true);
@@ -255,12 +263,12 @@ const Flashcards = () => {
             setCurrentWordIndex(currentWordIndex + 1);
             setWordsTranslated(wordsTranslated + 1);
             setStreak(streak + 1);
-
+    
             // Update longest streak if current streak exceeds it
             if (streak + 1 > longestStreak) {
                 setLongestStreak(streak + 1);
             }
-
+    
             if (currentWordIndex === words.length - 1) {
                 if (difficulty === 6) {
                     setFinalLevel(true);
@@ -270,9 +278,9 @@ const Flashcards = () => {
                     setShowModal(true);
                 }
             }
-
+    
             if (user) {
-                saveUserData(user.uid);
+                saveUserData(user.uid); // Save user data here
             }
         } else {
             setIsCorrect(false);
@@ -280,7 +288,7 @@ const Flashcards = () => {
             setStreak(0); // Reset streak if wrong answer
         }
     };
-
+    
     const handleNext = () => {
         if (finalLevel) {
             // Reset or handle the final level if needed
@@ -351,11 +359,10 @@ const Flashcards = () => {
         await setDoc(userRef, {
             wordsTranslated,
             streak,
-            longestStreak,
+            longestStreak, 
             hintsUsed
         }, { merge: true });
     };
-    
 
     const loadUserData = async (userId) => {
         const userRef = doc(firestore, 'users', userId);
@@ -427,6 +434,7 @@ const Flashcards = () => {
             <button className={styles.hintButton} onClick={toggleHintsModal}>
               Show Hints
             </button>
+             </div>
              {/* Hints modal */}
           {showHints && (
             <div className={styles.modalOverlay}>
@@ -435,7 +443,7 @@ const Flashcards = () => {
                   <span className={styles.close} onClick={toggleHintsModal}>
                     &times;
                   </span>
-                  <h2>Hints</h2>
+                  <h2>Hints:</h2><br></br>
                   <ul id="hints-list">
                     {words.map((word, index) => (
                       <li key={index}>
@@ -457,8 +465,9 @@ const Flashcards = () => {
                 </div>
               </div>
             </div>
+            
           )}
-          </div>
+         
       
           {/* Profile section */}
           <div className={styles.profileSection}>
@@ -547,6 +556,22 @@ const Flashcards = () => {
             </div>
             )}
           </div>
+
+          <button onClick={toggleLeaderboard}>
+                Leaderboard
+            </button>
+
+            {/* Modal for leaderboard */}
+            {showLeaderboard && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <button className="close-btn" onClick={toggleLeaderboard}>
+                            X
+                        </button>
+                        <Leaderboard />
+                    </div>
+                </div>
+            )}
       
           {/* Footer link */}
           <div className="fixed bottom-4 right-4">
