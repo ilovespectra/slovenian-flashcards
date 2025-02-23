@@ -4,39 +4,25 @@ import React, { useState, useEffect } from 'react';
 import { FaFire, FaMedal, FaLightbulb, FaCheckCircle, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import confetti from 'canvas-confetti'; 
 import UserProfile from "./UserProfile";
-import { getStorage } from "firebase/storage";
-import { useHistory } from "react-router-dom";
-import { auth, firestore } from "./firebaseConfig";  
 import Leaderboard from "./Leaderboard";
-import { initialWordsOne, 
-    initialWordsTwo, 
-    initialWordsThree, 
-    initialWordsFour, 
-    initialWordsFive, 
-    initialWordsSix, 
-    initialWordsSeven, 
-    initialWordsEight, 
-    initialWordsNine, 
-    initialWordsTen, 
-    initialWordsEleven,
-    initialWordsTwelve,
-    initialWordsThirteen,
-    initialWordsFourteen,
-    initialWordsColors, 
-    initialWordsNumbers, 
-    initialWordsBody,
-    initialWordsHouse, 
-    initialWordsPharmacy, 
-    initialWordsWeekdays,
-    initialWordsPhrases
-} from './initialWords';
 import styles from './Flashcards.module.css';
 
 // Firebase imports
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { auth, firestore } from "./firebaseConfig";  
+import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 
+// Word lists
+import { 
+    initialWordsOne, initialWordsTwo, initialWordsThree, initialWordsFour, 
+    initialWordsFive, initialWordsSix, initialWordsSeven, initialWordsEight, 
+    initialWordsNine, initialWordsTen, initialWordsEleven, initialWordsTwelve, 
+    initialWordsThirteen, initialWordsFourteen, initialWordsColors, 
+    initialWordsNumbers, initialWordsBody, initialWordsHouse, 
+    initialWordsPharmacy, initialWordsWeekdays, initialWordsPhrases 
+} from './initialWords';
+
+// Auth provider
 const provider = new GoogleAuthProvider();
 const db = firestore;
 
