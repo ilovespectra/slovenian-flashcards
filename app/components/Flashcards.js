@@ -434,6 +434,13 @@ const Flashcards = () => {
             <button className={styles.hintButton} onClick={toggleHintsModal}>
               Show Hints
             </button>
+
+            <button 
+            className={styles.kidsButton} 
+            onClick={() => window.open("https://learn-slovene.vercel.app/", "_blank")}
+            >
+            For Kids
+            </button>
              {/* Hints modal */}
           {showHints && (
             <div className={styles.modalOverlay}>
@@ -517,8 +524,6 @@ const Flashcards = () => {
     <span>{hintsUsed}</span>
   </div>
 </div>
-
-      
           {/* Flashcard section */}
           <div className={styles.flashcard}>
             <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
