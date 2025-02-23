@@ -437,7 +437,7 @@ const Flashcards = () => {
 
             <button 
             className={styles.kidsButton} 
-            onClick={() => window.open("https://learn-slovene.vercel.app/", "_blank")}
+            onClick={() => window.open("https://kidslearnslovene.xyz/", "_blank")}
             >
             For Kids
             </button>
