@@ -98,17 +98,16 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.85); 
     display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 0.3s ease-in-out;
 }
 
-/* Add this for smooth visibility transition when the leaderboard is hidden */
 .container.closed {
     opacity: 0;
-    pointer-events: none; /* Prevent interactions when closed */
+    pointer-events: none; 
 }
 
 /* Inner content box */

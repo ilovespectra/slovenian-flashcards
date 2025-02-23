@@ -50,6 +50,19 @@ const Leaderboard = () => {
         return () => unsubscribe();
     }, [sortBy]);
 
+    useEffect(() => {
+        if (isVisible) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+    
+        return () => {
+            document.body.style.overflow = "auto"; 
+        };
+    }, [isVisible]);
+    
+
     return (
         <div className={`${styles.container} ${isVisible ? '' : styles.closed}`}>
             <div className={styles.content}>
