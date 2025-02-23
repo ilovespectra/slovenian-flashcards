@@ -66,7 +66,6 @@ const Leaderboard = () => {
     return (
         <div className={`${styles.container} ${isVisible ? '' : styles.closed}`}>
             <div className={styles.content}>
-    
                 <button className={styles.closeButton} onClick={handleClose}>X</button>
                 <h1 className={styles.title}>Leaderboard</h1>
                 <div>
@@ -77,8 +76,8 @@ const Leaderboard = () => {
                         <option value="hintsUsed">Hints Used</option>
                     </select>
                 </div>
-                
-                <div>
+    
+                <div className={styles.tableContainer}>
                     {users.length === 0 ? (
                         <p>No users found.</p>
                     ) : (
@@ -124,7 +123,7 @@ const Leaderboard = () => {
                 </div>
             </div>
         </div>
-    );    
+    );
 };
 
 export default Leaderboard;

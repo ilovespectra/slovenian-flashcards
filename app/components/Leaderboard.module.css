@@ -1,14 +1,3 @@
-/* Inner content box */
-.content {
-    background-color: #66665a9c;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 800px;
-    width: 90%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-
 /* Title styling */
 .title {
     color: #f2f2f2;
@@ -103,6 +92,7 @@
     justify-content: center;
     align-items: center;
     transition: opacity 0.3s ease-in-out;
+    max-height: 50vh;
 }
 
 .container.closed {
@@ -158,11 +148,13 @@
         margin-top: 90px; /* Adjust margin to prevent overlap */
         align-items: flex-start; /* Align content from the top */
         background-color: #33333300;
+        max-height: 50vh;
     }
     
     /* Hide table headers */
     .table thead {
         display: none;
+        max-height: 50vh;
     }
 
     /* Display table rows as blocks */
@@ -174,6 +166,8 @@
         padding: 10px;
         background: #222;
         border-radius: 10px;
+        max-height: 60vh;
+        overflow-y: auto;
     }
 
     /* Style each data cell */
@@ -189,6 +183,7 @@
     /* Remove the last row's border */
     .table tr:last-child td {
         border-bottom: none;
+        max-height: 50vh;
     }
 
     /* Adjust profile picture size */
