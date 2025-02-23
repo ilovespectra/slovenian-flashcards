@@ -1,73 +1,50 @@
-/* Leaderboard.module.css */
-
-.container {
-    padding: 20px;
-    max-width: 1200px;
-    padding: 10px;
-    border-radius: 12px;
-    margin: 0 auto;
+/* Inner content box */
+.content {
     background-color: #66665a9c;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
 }
 
+/* Title styling */
 .title {
     color: #f2f2f2;
     font-size: 2rem;
     margin-bottom: 20px;
-    padding: 10px;
-    text-align: center;
     font-weight: 600;
 }
 
-.sortLabel {
-    color: #f0f0f0;
-    font-weight: 500;
-}
-
-.sortSelect {
-    background-color: #333;
-    color: #f0f0f0;
-    padding: 10px;
-    border: 1px solid #555;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
+/* Table styling */
 .table {
     width: 100%;
     background-color: #333;
     margin-top: 20px;
     border-collapse: collapse;
-    padding: 10px;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.tableHeader {
-    background-color: #444;
-    color: #fff;
+.table th,
+.table td {
     padding: 12px;
     text-align: center;
-    padding: 12px;
 }
 
-.tableRow {
-    padding: 12px;
-    text-align: right;
+.table th {
+    background-color: #444;
+    color: #fff;
 }
 
 .tableRowEven {
     background-color: #4f4f4f;
-    padding: 10px;
-    text-align: center;
 }
 
 .tableRowOdd {
     background-color: #333;
-    padding: 10px;
-    text-align: center;
 }
 
 .tableRowHover:hover {
@@ -75,42 +52,164 @@
     cursor: pointer;
 }
 
+/* Profile picture */
+.profilePic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .defaultProfilePic {
-    width: 30px;
-    height: 30px;
-    background-color: #555;
-    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #666;
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    font-size: 1rem;
+    font-weight: bold;
 }
 
 .userInfo {
     display: flex;
     align-items: center;
-    padding: 12px;
+    gap: 10px;
 }
 
-.profilePic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
+.sortLabel {
+    color: white;
 }
 
-/* Mobile responsiveness */
+.sortSelect {
+    padding: 5px;
+    margin-left: 10px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Full-screen overlay */
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Add this for smooth visibility transition when the leaderboard is hidden */
+.container.closed {
+    opacity: 0;
+    pointer-events: none; /* Prevent interactions when closed */
+}
+
+/* Inner content box */
+.content {
+    background-color: #66665a9c;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Title styling */
+.title {
+    color: #f2f2f2;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Close button positioning */
+.closeButton {
+    display: block;
+    position: absolute;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: rgba(182, 52, 52, 0.762);
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.closeButton:hover {
+    font-size: 22px;
+    transition: 0.3s ease;
+}
+
+
+/* Only hide the close button when the leaderboard is closed */
+.container.closed .closeButton {
+    display: none;
+}
 @media (max-width: 768px) {
-    .table {
-        font-size: 0.9rem;
+
+    .container {
+        margin-top: 90px; /* Adjust margin to prevent overlap */
+        align-items: flex-start; /* Align content from the top */
+        background-color: #33333300;
+    }
+    
+    /* Hide table headers */
+    .table thead {
+        display: none;
     }
 
-    .tableHeader, .tableRow {
-        padding: 8px;
+    /* Display table rows as blocks */
+    .table tbody, 
+    .table tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #222;
+        border-radius: 10px;
     }
 
-    .sortLabel, .sortSelect {
-        font-size: 0.9rem;
+    /* Style each data cell */
+    .table td {
+        display: flex;
+        justify-content: space-between; /* Align header left, value right */
+        align-items: center;
+        padding: 8px 12px;
+        border-bottom: 1px solid #444;
+        color: #fff;
+    }
+
+    /* Remove the last row's border */
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Adjust profile picture size */
+    .userInfo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profilePic {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    /* Style the pseudo-labels */
+    .table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #bbb;
     }
 }

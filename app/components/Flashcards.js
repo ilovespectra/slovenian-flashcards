@@ -434,7 +434,6 @@ const Flashcards = () => {
             <button className={styles.hintButton} onClick={toggleHintsModal}>
               Show Hints
             </button>
-             </div>
              {/* Hints modal */}
           {showHints && (
             <div className={styles.modalOverlay}>
@@ -467,8 +466,7 @@ const Flashcards = () => {
             </div>
             
           )}
-         
-      
+             </div>
           {/* Profile section */}
           <div className={styles.profileSection}>
             {user ? (
@@ -496,21 +494,30 @@ const Flashcards = () => {
             />
           )}
       
-          {/* Counters section */}
-          <div className={styles.counters}>
-            <div>
-              <FaCheckCircle /> Words Translated: {wordsTranslated}
-            </div>
-            <div>
-              <FaFire /> Streak: {streak}
-            </div>
-            <div>
-              <FaMedal /> Longest Streak: {longestStreak}
-            </div>
-            <div>
-              <FaLightbulb /> Hints Used: {hintsUsed}
-            </div>
-          </div>
+       {/* Counters section */}
+<div className={styles.counters}>
+  <div>
+    <FaCheckCircle size={24} />
+    <span>Words Translated</span>
+    <span>{wordsTranslated}</span>
+  </div>
+  <div>
+    <FaFire size={24} />
+    <span>Streak</span>
+    <span>{streak}</span>
+  </div>
+  <div>
+    <FaMedal size={24} />
+    <span>Longest Streak</span>
+    <span>{longestStreak}</span>
+  </div>
+  <div>
+    <FaLightbulb size={24} />
+    <span>Hints Used</span>
+    <span>{hintsUsed}</span>
+  </div>
+</div>
+
       
           {/* Flashcard section */}
           <div className={styles.flashcard}>
@@ -544,17 +551,17 @@ const Flashcards = () => {
               <div className={styles.hintDisplay}>{hint}</div>
             </div>
       
-          {/* Result modal */}
             {showModal && (
             <div className={`${styles.modal} ${isCorrect ? styles.successModal : styles.incorrectModal}`}>
                 <div className={styles.resultText}>
                 {isCorrect ? 'Correct!' : 'Incorrect!'}
                 </div>
                 <button className={styles.modalButton} onClick={handleNext}>
-                {finalLevel ? 'Start Over' : 'Next'}
+                {finalLevel ? 'Start Over' : isCorrect ? 'Next' : 'Again'}
                 </button>
             </div>
             )}
+
           </div>
 
           <button onClick={toggleLeaderboard}>
@@ -565,9 +572,6 @@ const Flashcards = () => {
             {showLeaderboard && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <button className="close-btn" onClick={toggleLeaderboard}>
-                            X
-                        </button>
                         <Leaderboard />
                     </div>
                 </div>
