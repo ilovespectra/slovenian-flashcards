@@ -87,7 +87,6 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85); 
     display: flex;
     justify-content: center;
     transition: opacity 0.3s ease-in-out;
