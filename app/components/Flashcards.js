@@ -79,20 +79,18 @@ const Flashcards = () => {
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            setUser(user);
-            if (user) {
-                await fetchUserProfile(user.uid);
-            } else {
-                resetGameData();
-            }
-        });
-    
-        return () => unsubscribe();
-    }, []);    
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          setUser(user);
+          if (user) {
+              await fetchUserProfile(user.uid);
+          } else {
+              resetGameData();
+          }
+      });
+  
+      return () => unsubscribe();
+  }, []);
 
-    
-      
     useEffect(() => {
         const shuffledWords = getWordsByDifficulty();
         shuffleArray(shuffledWords);
@@ -115,6 +113,7 @@ const Flashcards = () => {
           setStreak(data.streak || 0);
           setLongestStreak(data.longestStreak || 0);
           setHintsUsed(data.hintsUsed || 0);
+          setDifficulty(data.difficulty || 1);
         }
     };
     
@@ -296,8 +295,13 @@ const Flashcards = () => {
     };
 
     const handleDifficultyChange = (event) => {
-        setDifficulty(Number(event.target.value));
-    };
+      const newDifficulty = Number(event.target.value);
+      setDifficulty(newDifficulty);
+      
+      if (user) {
+          saveUserData(user.uid);
+      }
+  };
 
     const handleHint = () => {
         if (words.length === 0 || currentWordIndex >= words.length) return;
@@ -346,7 +350,8 @@ const Flashcards = () => {
             wordsTranslated,
             streak,
             longestStreak, 
-            hintsUsed
+            hintsUsed,
+            difficulty
         }, { merge: true });
     };
 
@@ -404,17 +409,17 @@ const Flashcards = () => {
           {/* Sidebar */}
           <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
             <div className={styles.dropdownContainer}>
-              <select
+            <select
                 className={styles.difficultyDropdown}
                 value={difficulty}
-                onChange={(e) => setDifficulty(Number(e.target.value))}
-              >
+                onChange={handleDifficultyChange}
+            >
                 {difficultyOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label === "ALL" ? "All Words" : `Level: ${option.label}`}
-                  </option>
+                    <option key={option.value} value={option.value}>
+                        {option.label === "ALL" ? "All Words" : `Level: ${option.label}`}
+                    </option>
                 ))}
-              </select>
+            </select>
             </div>
       
             <button className={styles.hintButton} onClick={toggleHintsModal}>
