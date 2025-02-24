@@ -293,11 +293,15 @@ const Flashcards = () => {
 
     useEffect(() => {
       const handleClickOutside = (event) => {
+          const isXButton = event.target.closest(`.${styles.sidebarToggleButton}`);
+          
           if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-              setIsSidebarOpen(false);
+              if (!isXButton) {
+                  setIsSidebarOpen(false);
+              }
           }
       };
-
+  
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
           document.removeEventListener('mousedown', handleClickOutside);
