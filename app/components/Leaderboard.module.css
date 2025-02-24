@@ -90,8 +90,11 @@
     background-color: rgba(0, 0, 0, 0.85); 
     display: flex;
     justify-content: center;
-    align-items: center;
     transition: opacity 0.3s ease-in-out;
+    max-height: 50vh;
+    margin-top: 90px; 
+    align-items: flex-start; 
+    background-color: #33333300;
     max-height: 50vh;
 }
 
@@ -145,8 +148,8 @@
 @media (max-width: 768px) {
 
     .container {
-        margin-top: 90px; /* Adjust margin to prevent overlap */
-        align-items: flex-start; /* Align content from the top */
+        margin-top: 90px; 
+        align-items: flex-start; 
         background-color: #33333300;
         max-height: 50vh;
     }
