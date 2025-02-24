@@ -41,13 +41,13 @@ const difficultyOptions = [
     { label: "11", value: 11 },
     { label: "12", value: 12 },
     { label: "13", value: 13 },
-    { label: "Colors", value: 14 },
-    { label: "`#`", value: 15 },
-    { label: "Body", value: 16 },
-    { label: "Days", value: 17 },
-    { label: "18", value: 18 },
-    { label: "19", value: 19 },
-    { label: "20", value: 20 }
+    // { label: "Colors", value: 14 },
+    // { label: "`#`", value: 15 },
+    // { label: "Body", value: 16 },
+    // { label: "Days", value: 17 },
+    { label: "14", value: 18 },
+    { label: "15", value: 19 },
+    { label: "16", value: 20 }
 ];
 
 
@@ -440,7 +440,6 @@ const Flashcards = () => {
                   <span className={styles.close} onClick={toggleHintsModal}>
                     &times;
                   </span>
-                  <h2>Hints:</h2><br></br>
                   <ul id="hints-list">
                     {words.map((word, index) => (
                       <li key={index}>
