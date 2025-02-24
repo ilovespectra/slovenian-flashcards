@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaFire, FaMedal, FaLightbulb, FaCheckCircle, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import confetti from 'canvas-confetti'; 
 import UserProfile from "./UserProfile";
@@ -73,10 +73,7 @@ const Flashcards = () => {
     const [showHintModal, setShowHintModal] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
     const [showLeaderboard, setShowLeaderboard] = useState(false);
-
-    const toggleLeaderboard = () => {
-        setShowLeaderboard(!showLeaderboard);
-    };
+    const sidebarRef = useRef(null); 
 
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -294,6 +291,19 @@ const Flashcards = () => {
         }
     };
 
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+          if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+              setIsSidebarOpen(false);
+          }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, []);
+
     const handleDifficultyChange = (event) => {
       const newDifficulty = Number(event.target.value);
       setDifficulty(newDifficulty);
@@ -383,15 +393,23 @@ const Flashcards = () => {
 
     const currentWord = words[currentWordIndex] || {};
 
+    useEffect(() => {
+      if (showLeaderboard) {
+          setIsSidebarOpen(false);
+      }
+  }, [showLeaderboard]);
     // New function to toggle hints modal
     const toggleHintsModal = () => {
         setShowHints(!showHints);
     };
 
     const toggleSidebar = () => {
-        setIsSidebarOpen(prevState => !prevState);
-    };
-    
+      setIsSidebarOpen((prev) => !prev);
+  };
+
+  const toggleLeaderboard = () => {
+      setShowLeaderboard((prev) => !prev);
+  };
 
     const handleProfileUpdate = async () => {
         if (user) {
@@ -399,15 +417,19 @@ const Flashcards = () => {
         }
       };
 
+    
+
       return (
         <div className={styles.container}>
           {/* Sidebar toggle button */}
           <button className={styles.sidebarToggleButton} onClick={toggleSidebar}>
-            {isSidebarOpen ? "✕" : "☰"}
-          </button>
+                {isSidebarOpen ? "✕" : "☰"}
+            </button>
       
-          {/* Sidebar */}
-          <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
+            <div
+                ref={sidebarRef}
+                className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}
+                >
             <div className={styles.dropdownContainer}>
             <select
                 className={styles.difficultyDropdown}
@@ -492,28 +514,28 @@ const Flashcards = () => {
           )}
       
        {/* Counters section */}
-<div className={styles.counters}>
-  <div>
-    <FaCheckCircle size={24} />
-    <span>Words Translated</span>
-    <span>{wordsTranslated}</span>
-  </div>
-  <div>
-    <FaFire size={24} />
-    <span>Streak</span>
-    <span>{streak}</span>
-  </div>
-  <div>
-    <FaMedal size={24} />
-    <span>Longest Streak</span>
-    <span>{longestStreak}</span>
-  </div>
-  <div>
-    <FaLightbulb size={24} />
-    <span>Hints Used</span>
-    <span>{hintsUsed}</span>
-  </div>
-</div>
+      <div className={styles.counters}>
+        <div>
+          <FaCheckCircle size={24} />
+          <span>Words Translated</span>
+          <span>{wordsTranslated}</span>
+        </div>
+        <div>
+          <FaFire size={24} />
+          <span>Streak</span>
+          <span>{streak}</span>
+        </div>
+        <div>
+          <FaMedal size={24} />
+          <span>Longest Streak</span>
+          <span>{longestStreak}</span>
+        </div>
+        <div>
+          <FaLightbulb size={24} />
+          <span>Hints Used</span>
+          <span>{hintsUsed}</span>
+        </div>
+      </div>
           {/* Flashcard section */}
           <div className={styles.flashcard}>
             <div className={styles.englishWord}>{currentWord.english || "Loading..."}</div>
@@ -559,9 +581,7 @@ const Flashcards = () => {
 
           </div>
 
-          <button onClick={toggleLeaderboard}>
-                Leaderboard
-            </button>
+          <button onClick={toggleLeaderboard}>Leaderboard</button>
 
             {/* Modal for leaderboard */}
             {showLeaderboard && (
