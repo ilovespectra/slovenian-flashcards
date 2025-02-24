@@ -127,15 +127,15 @@
     position: absolute;
     background: transparent;
     border: none;
-    font-size: 18px;
-    color: rgba(182, 52, 52, 0.762);
+    font-size: 22px;
+    color: rgba(214, 41, 41, 0.817);
     cursor: pointer;
     transition: 0.3s;
     z-index: 10;
 }
 
 .closeButton:hover {
-    font-size: 22px;
+    font-size: 26px;
     transition: 0.3s ease;
 }
 
