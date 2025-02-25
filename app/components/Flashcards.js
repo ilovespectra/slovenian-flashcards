@@ -504,7 +504,24 @@ const Flashcards = () => {
                 </span>
               </div>
             ) : (
-              <button onClick={handleLogin}>Login with Google</button>
+              <button
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: "12px",
+                padding: "10px 20px",
+                color: "white",
+                fontSize: "16px",
+                cursor: "pointer",
+                backdropFilter: "blur(10px)",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "background-color 0.3s ease",
+                textTransform: "uppercase",
+              }}
+              onClick={handleLogin}
+            >
+              Login with Google
+            </button>
             )}
           </div>
       
@@ -585,7 +602,20 @@ const Flashcards = () => {
 
           </div>
 
-          <button onClick={toggleLeaderboard}>Leaderboard</button>
+          <button
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: "12px",
+                padding: "10px 20px",
+                color: "white",
+                fontSize: "16px",
+                cursor: "pointer",
+                backdropFilter: "blur(10px)",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "background-color 0.3s ease",
+                textTransform: "uppercase",
+              }} onClick={toggleLeaderboard}>View Leaderboard</button>
 
             {/* Modal for leaderboard */}
             {showLeaderboard && (
