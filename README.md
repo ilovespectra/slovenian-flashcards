@@ -4,7 +4,7 @@ WIP- This app is for English speakers who are just getting started learning Slov
 
 A link to the official online course, made available by the [Center for Slovene as a Second and Foreign Language](https://centerslo.si/), is available in the bottom righthand corner. Happy studying!
 
-*You can also view the online courses [here](https://slonline.si).*
+*You can also view the courses [here](https://slonline.si).*
 
 # Contributing
 
