@@ -403,12 +403,13 @@ const Flashcards = () => {
       }
   }, [showLeaderboard]);
   
-    const toggleHintsModal = () => {
-      if (!showHints) {
-          setStreak(0); 
-      }
-      setShowHints(!showHints);
-  };
+  const toggleHintsModal = () => {
+    if (!showHints) {
+        setStreak(0);
+        setHintsUsed(hintsUsed + 1);
+    }
+    setShowHints(!showHints);
+};
 
     const toggleSidebar = () => {
       setIsSidebarOpen((prev) => !prev);
