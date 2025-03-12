@@ -402,14 +402,23 @@ const Flashcards = () => {
           setIsSidebarOpen(false);
       }
   }, [showLeaderboard]);
-    // New function to toggle hints modal
+  
     const toggleHintsModal = () => {
-        setShowHints(!showHints);
-    };
+      if (!showHints) {
+          setStreak(0); 
+      }
+      setShowHints(!showHints);
+  };
 
     const toggleSidebar = () => {
       setIsSidebarOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (!isSidebarOpen) {
+        setShowHints(false);
+    }
+}, [isSidebarOpen]);
 
   const toggleLeaderboard = () => {
       setShowLeaderboard((prev) => !prev);
@@ -449,7 +458,7 @@ const Flashcards = () => {
             </div>
       
             <button className={styles.hintButton} onClick={toggleHintsModal}>
-              Show Hints
+              Show Key
             </button>
 
             <button 
