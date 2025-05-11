@@ -19,7 +19,8 @@ import {
     initialWordsNine, initialWordsTen, initialWordsEleven, initialWordsTwelve, 
     initialWordsThirteen, initialWordsFourteen, initialWordsColors, 
     initialWordsNumbers, initialWordsBody, initialWordsHouse, 
-    initialWordsPharmacy, initialWordsWeekdays, initialWordsPhrases 
+    initialWordsPharmacy, initialWordsWeekdays, initialWordsPhrases,
+    initialWordsIrregularVerbs
 } from './initialWords';
 
 // Auth provider
@@ -47,7 +48,8 @@ const difficultyOptions = [
     // { label: "Days", value: 17 },
     { label: "14", value: 18 },
     { label: "15", value: 19 },
-    { label: "16", value: 20 }
+    { label: "16", value: 20 },
+    { label: "Nep. Glagoli", value: 21}
 ];
 
 
@@ -168,7 +170,8 @@ const Flashcards = () => {
                 ...initialWordsHouse,
                 ...initialWordsPharmacy,
                 ...initialWordsWeekdays,
-                ...initialWordsPhrases
+                ...initialWordsPhrases,
+                ...initialWordsIrregularVerbs,
             ];
         }
     
@@ -213,6 +216,8 @@ const Flashcards = () => {
                 return [...initialWordsPharmacy];
             case 20:
                 return [...initialWordsPhrases];
+            case 21:
+                return [...initialWordsIrregularVerbs];
             default:
                 return [...initialWordsOne];
         }
